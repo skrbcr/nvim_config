@@ -1,14 +1,15 @@
+-- vim.g.loaded_netrw = 1
+-- vim.g.loaded_netrwPlugin = 1
 -- 文字コード
-vim.cmd 'set fenc=utf-8'
-
+vim.bo.fenc = 'utf-8'
 -- バックアップファイルを作らない
-vim.cmd 'set nobackup'
+vim.o.bk = false
 -- スワップファイルを作らない
-vim.cmd 'set noswapfile'
+vim.bo.swf = false
 -- 編集中のファイルが変更されたら自動で読み直す
-vim.cmd 'set autoread'
+vim.o.ar = true
 -- 入力中のコマンドをステータスに表示
-vim.cmd 'set showcmd'
+vim.o.sc = true
 
 -- 行番号を表示
 vim.wo.nu = true
@@ -65,6 +66,7 @@ require("catppuccin").setup({
         }
     end,
     integrations = {
+        neotree = true,
     },
 })
 vim.cmd 'colorscheme catppuccin'
@@ -76,4 +78,5 @@ require('lualine').setup {
     globalstatus = true,
   }
 }
+-- require("nvim-tree").setup()
 

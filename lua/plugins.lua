@@ -4,6 +4,7 @@
 
 return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
+    use 'sheerun/vim-polyglot'
     use { "catppuccin/nvim", as = "catppuccin" }
     use {
     	'nvim-lualine/lualine.nvim',
@@ -43,10 +44,17 @@ return require('packer').startup(function(use)
         branch = "v2.x",
         requires = { 
             "nvim-lua/plenary.nvim",
-            "kyazdani42/nvim-web-devicons", -- not strictly required, but recommended
+            "kyazdani42/nvim-web-devicons",
             "MunifTanjim/nui.nvim",
         }
     }
+    -- use {
+    --     'nvim-tree/nvim-tree.lua',
+    --     requires = {
+    --         'nvim-tree/nvim-web-devicons', -- optional, for file icons
+    --     },
+    --     tag = 'nightly' -- optional, updated every week. (see issue #1193)
+    -- }
     use 'tpope/vim-commentary'
     use 'ryanoasis/vim-devicons'
 end)
