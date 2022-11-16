@@ -44,6 +44,13 @@ vim.cmd 'set softtabstop=4'
 vim.cmd 'set tabstop=4'
 -- ビープ音を可視化
 -- set visualbell
+vim.o.cot = 'menuone,noinsert'
+vim.cmd [[
+inoremap <expr><CR>  pumvisible() ? neocomplcache#close_popup() : "<CR>"
+]]
+-- inoremap <expr><C-n> pumvisible() ? "<Down>" : "<C-n>"
+-- inoremap <expr><C-p> pumvisible() ? "<Up>" : "<C-p>"
+-- ]]
  
 --[[ plugins ]]--
 require('plugins')
