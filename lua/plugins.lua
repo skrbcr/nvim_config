@@ -5,9 +5,6 @@
 return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
     use 'sheerun/vim-polyglot'
-    use {
-	    "windwp/nvim-autopairs",
-    }
     use { "catppuccin/nvim", as = "catppuccin" }
     use {
     	'nvim-lualine/lualine.nvim',
@@ -60,6 +57,7 @@ return require('packer').startup(function(use)
     end
     -- windows 専用
     if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+	use 'windwp/nvim-autopairs'
         use 'lervag/vimtex'
         use 'Shougo/deoplete.nvim'
     end
