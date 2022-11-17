@@ -10,7 +10,7 @@ vim.bo.swf = false
 vim.o.ar = true
 -- 入力中のコマンドをステータスに表示
 vim.o.sc = true
-if vim.fn.has('win32') or vim.fn.has('win64') then
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
     vim.cmd 'filetype plugin indent on'
 end
 
@@ -87,7 +87,7 @@ require('lualine').setup {
   }
 }
 
-if vim.fn.has('win32') or vim.fn.has('win64') then
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
     vim.g.vimtex_compiler_progname = 'nvr'
     vim.g.vimtex_view_general_viewer = "C:/Users/akima/AppData/Local/SumatraPDF/SumatraPDF.exe"
     vim.g.vimtex_view_general_options ='-reuse-instance -forward-search @tex @line @pdf'

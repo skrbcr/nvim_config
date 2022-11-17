@@ -49,15 +49,17 @@ return require('packer').startup(function(use)
             "MunifTanjim/nui.nvim",
         }
     }
-    -- use {
-    --     'nvim-tree/nvim-tree.lua',
-    --     requires = {
-    --         'nvim-tree/nvim-web-devicons', -- optional, for file icons
-    --     },
-    --     tag = 'nightly' -- optional, updated every week. (see issue #1193)
-    -- }
     use 'tpope/vim-commentary'
     use 'ryanoasis/vim-devicons'
+    
+    -- Linux 専用
+    if vim.fn.has('unix') == 1 then
+
+    end
+    -- windows 専用
+    if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+        use 'lervag/vimtex'
+    end
 end)
 
 
