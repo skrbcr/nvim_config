@@ -10,6 +10,9 @@ vim.bo.swf = false
 vim.o.ar = true
 -- 入力中のコマンドをステータスに表示
 vim.o.sc = true
+if vim.fn.has('win32') or vim.fn.has('win64') then
+    vim.cmd 'filetype plugin indent on'
+end
 
 -- 行番号を表示
 vim.wo.nu = true
@@ -35,15 +38,13 @@ vim.o.is = true
 vim.bo.si = true
 vim.bo.ai = true
 -- -- Tabは半角スペース
-vim.cmd	'set expandtab'
+vim.bo.et = true
 -- -- インデント幅
-vim.cmd 'set shiftwidth=4'
+vim.bo.sw = 4
 -- -- Tab挿入時の文字幅
-vim.cmd 'set softtabstop=4'
+vim.bo.sts = 4
 -- -- Tabの表示幅
-vim.cmd 'set tabstop=4'
--- ビープ音を可視化
--- set visualbell
+vim.bo.ts = 4
 vim.o.cot = 'menuone,noinsert'
 vim.cmd [[
 inoremap <expr><CR>  pumvisible() ? neocomplcache#close_popup() : "<CR>"
@@ -85,5 +86,10 @@ require('lualine').setup {
     globalstatus = true,
   }
 }
--- require("nvim-tree").setup()
 
+if vim.fn.has('win32') or vim.fn.has('win64') then
+    vim.g.vimtex_compiler_progname = 'nvr'
+    vim.g.vimtex_view_general_viewer = "C:/Users/akima/AppData/Local/SumatraPDF/SumatraPDF.exe"
+    vim.g.vimtex_view_general_options ='-reuse-instance -forward-search @tex @line @pdf'
+    vim.cmd "let g:vimtex_compiler_latexmk_engines = { '_' : '-lualatex' }"
+end
