@@ -46,12 +46,7 @@ vim.bo.sts = 4
 -- -- Tabの表示幅
 vim.bo.ts = 4
 vim.o.cot = 'menuone,noinsert'
-vim.cmd [[
-inoremap <expr><CR>  pumvisible() ? neocomplcache#close_popup() : "<CR>"
-]]
--- inoremap <expr><C-n> pumvisible() ? "<Down>" : "<C-n>"
--- inoremap <expr><C-p> pumvisible() ? "<Up>" : "<C-p>"
--- ]]
+vim.api.nvim_set_keymap('i', '<CR>', '<C-y>', { noremap = true })
  
 --[[ plugins ]]--
 require('plugins')
