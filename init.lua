@@ -57,6 +57,7 @@ inoremap <expr><CR>  pumvisible() ? neocomplcache#close_popup() : "<CR>"
 require('plugins')
 
 require("nvim-autopairs").setup()
+
 -- カラースキーム
 require("catppuccin").setup({
     flavour = "mocha",
@@ -89,8 +90,16 @@ require('lualine').setup {
 }
 
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+    vim.g.python3_host_prog = 'C:/Users/akima/AppData/Local/Programs/Python/Python311/python.exe'
+    vim.cmd "let g:deoplete#enable_at_startup = 1"
     vim.g.vimtex_compiler_progname = 'nvr'
     vim.g.vimtex_view_general_viewer = "C:/Users/akima/AppData/Local/SumatraPDF/SumatraPDF.exe"
     vim.g.vimtex_view_general_options ='-reuse-instance -forward-search @tex @line @pdf'
     vim.cmd "let g:vimtex_compiler_latexmk_engines = { '_' : '-lualatex' }"
+    vim.cmd [[
+        " This is new style
+        call deoplete#custom#var('omni', 'input_patterns', {
+            \ 'tex': g:vimtex#re#deoplete
+        \})
+    ]]
 end
