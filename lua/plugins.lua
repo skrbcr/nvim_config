@@ -5,6 +5,9 @@
 return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
     use 'sheerun/vim-polyglot'
+    use {
+	    "windwp/nvim-autopairs",
+    }
     use { "catppuccin/nvim", as = "catppuccin" }
     use {
     	'nvim-lualine/lualine.nvim',

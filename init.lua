@@ -56,6 +56,7 @@ inoremap <expr><CR>  pumvisible() ? neocomplcache#close_popup() : "<CR>"
 --[[ plugins ]]--
 require('plugins')
 
+require("nvim-autopairs").setup()
 -- カラースキーム
 require("catppuccin").setup({
     flavour = "mocha",
