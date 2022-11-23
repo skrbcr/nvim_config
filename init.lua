@@ -93,7 +93,6 @@ require('lualine').setup {
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
     vim.g.python3_host_prog = 'C:/Users/akima/AppData/Local/Programs/Python/Python311/python.exe'
     vim.cmd "let g:deoplete#enable_at_startup = 1"
-    vim.v.servername = 'nvim-12345-0'
     vim.g.vimtex_compiler_progname = 'nvr'
     vim.g.vimtex_view_general_viewer = "C:/Users/akima/AppData/Local/SumatraPDF/SumatraPDF.exe"
     vim.g.vimtex_view_general_options ='-reuse-instance -forward-search @tex @line @pdf'
