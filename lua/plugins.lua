@@ -54,6 +54,7 @@ return require('packer').startup(function(use)
     -- Linux 専用
     if vim.fn.has('unix') == 1 then
     	use {'neoclide/coc.nvim', branch = 'release'}
+        use {'pappasam/coc-jedi'}
     end
     -- windows 専用
     if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
