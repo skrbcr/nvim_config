@@ -52,8 +52,8 @@ return require('packer').startup(function(use)
     use 'ryanoasis/vim-devicons'
     
     -- Linux 専用
+    use {'neoclide/coc.nvim', branch = 'release'}
     if vim.fn.has('unix') == 1 then
-    	use {'neoclide/coc.nvim', branch = 'release'}
     end
     -- windows 専用
     if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
