@@ -51,11 +51,6 @@ return require('packer').startup(function(use)
     -- windows 専用
     if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
         use 'lervag/vimtex'
-        use 'Shougo/deoplete.nvim'
-        use {
-            'hrsh7th/vim-vsnip',
-            requires = { 'hrsh7th/vim-vsnip-integ' }
-        }
     end
 end)
 
