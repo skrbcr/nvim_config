@@ -45,6 +45,7 @@ vim.bo.sts = 4
 vim.bo.ts = 4
 vim.o.cot = 'menuone,noinsert'
 vim.api.nvim_set_keymap('i', '<CR>', '<C-y>', { noremap = true })
+vim.cmd 'inoremap <silent><expr> <Enter> coc#pum#visible() ? coc#pum#confirm() : "\\<Enter>"'
 if vim.fn.has('unix') then
 end
  
