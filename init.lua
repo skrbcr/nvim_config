@@ -10,9 +10,7 @@ vim.bo.swf = false
 vim.o.ar = true
 -- 入力中のコマンドをステータスに表示
 vim.o.sc = true
-if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
-    vim.cmd 'filetype plugin indent on'
-end
+vim.cmd 'filetype plugin indent on'
 
 -- 行番号を表示
 vim.wo.nu = true
@@ -89,6 +87,30 @@ require('lualine').setup {
     globalstatus = true,
   }
 }
+
+if vim.fn.has('unix') == 1 then
+    -- Coc-explorer
+    vim.api.nvim_set_keymap('n', '<space>e', '<Cmd>CocCommand explorer<CR>', {})
+    vim.cmd [[
+" Use <C-l> for trigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
+
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+
+" Use <leader>x for convert visual selected code to snippet
+xmap <leader>x  <Plug>(coc-convert-snippet)
+    ]]
+end
 
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
     vim.g.python3_host_prog = 'C:/Users/akima/AppData/Local/Programs/Python/Python311/python.exe'
