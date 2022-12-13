@@ -61,6 +61,10 @@ return require('packer').startup(function(use)
 	use 'windwp/nvim-autopairs'
         use 'lervag/vimtex'
         use 'Shougo/deoplete.nvim'
+        use {
+            'hrsh7th/vim-vsnip',
+            requires = { 'hrsh7th/vim-vsnip-integ' }
+        }
     end
 end)
 
