@@ -51,9 +51,9 @@ return require('packer').startup(function(use)
     use 'tpope/vim-commentary'
     use 'ryanoasis/vim-devicons'
     
+    use {'neoclide/coc.nvim', branch = 'release'}
     -- Linux 専用
     if vim.fn.has('unix') == 1 then
-    	use {'neoclide/coc.nvim', branch = 'release'}
         use {'pappasam/coc-jedi'}
     end
     -- windows 専用
