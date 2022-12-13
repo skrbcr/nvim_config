@@ -46,7 +46,6 @@ vim.bo.ts = 4
 vim.o.cot = 'menuone,noinsert'
 vim.api.nvim_set_keymap('i', '<CR>', '<C-y>', { noremap = true })
 if vim.fn.has('unix') then
-    vim.cmd 'inoremap <silent><expr> <Enter> coc#pum#visible() ? coc#pum#confirm() : "\\<Enter>"'
 end
  
 --[[ plugins ]]--
@@ -54,7 +53,6 @@ require('plugins')
 vim.cmd "set statusline^=%{coc#status()}"
 vim.cmd "autocmd User CocStatusChange redrawstatus"
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
-    require("nvim-autopairs").setup()
 end
 
 -- カラースキーム
