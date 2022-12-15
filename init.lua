@@ -44,10 +44,15 @@ vim.bo.sts = 4
 -- -- Tabの表示幅
 vim.bo.ts = 4
 vim.o.cot = 'menuone,noinsert'
-vim.api.nvim_set_keymap('i', '<CR>', '<C-y>', { noremap = true })
-vim.cmd 'inoremap <silent><expr> <Enter> coc#pum#visible() ? coc#pum#confirm() : "\\<Enter>"'
 if vim.fn.has('unix') then
 end
+
+-- [[ Key Maps ]] --
+vim.api.nvim_set_keymap('i', '<CR>', '<C-y>', { noremap = true })
+vim.cmd 'inoremap <silent><expr> <Enter> coc#pum#visible() ? coc#pum#confirm() : "\\<Enter>"'
+vim.api.nvim_set_keymap('n', ']b', ':bnext<CR>', { silent = true, noremap = true })
+vim.api.nvim_set_keymap('n', '[b', ':bprev<CR>', { silent = true, noremap = true })
+vim.api.nvim_set_keymap('n', 'A-v', '<C-y>', { noremap = true })
  
 --[[ plugins ]]--
 require('plugins')
@@ -86,6 +91,13 @@ require('lualine').setup {
     globalstatus = true,
   }
 }
+
+
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+end
+if vim.fn.has('unix') == 1 then
+    vim.g.coc_config_home = "~/.config/nvim/coc-config-unix.json"
+end
 
  -- Coc-explorer
 vim.api.nvim_set_keymap('n', '<space>e', '<Cmd>CocCommand explorer<CR>', {})
