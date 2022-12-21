@@ -39,19 +39,18 @@ return require('packer').startup(function(use)
         }
         end
     }
+    use {'neoclide/coc.nvim', branch = 'release'}
     use 'tpope/vim-commentary'
     use 'ryanoasis/vim-devicons'
+    use 'lervag/vimtex'
     
-    use {'neoclide/coc.nvim', branch = 'release'}
     -- Linux 専用
-    use {'neoclide/coc.nvim', branch = 'release'}
     if vim.fn.has('unix') == 1 then
         use 'cdelledonne/vim-cmake'
         use 'pappasam/coc-jedi'
     end
     -- windows 専用
     if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
-        use 'lervag/vimtex'
     end
 end)
 
