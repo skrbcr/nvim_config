@@ -10,10 +10,6 @@ return require('packer').startup(function(use)
     	'nvim-lualine/lualine.nvim',
     	requires = { 'kyazdani42/nvim-web-devicons', opt = true }
     }
-    -- use {
-    --     'romgrk/barbar.nvim',
-    --     requires = {'kyazdani42/nvim-web-devicons'}
-    -- }
     use {
         'akinsho/bufferline.nvim',
         tag = "v3.*",

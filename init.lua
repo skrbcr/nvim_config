@@ -59,8 +59,6 @@ vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', { noremap = true })
 require('plugins')
 vim.cmd "set statusline^=%{coc#status()}"
 vim.cmd "autocmd User CocStatusChange redrawstatus"
-if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
-end
 
 -- カラースキーム
 require("catppuccin").setup({
@@ -92,14 +90,11 @@ require('lualine').setup {
   }
 }
 
-
-if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
-end
 if vim.fn.has('unix') == 1 then
     vim.g.coc_config_home = "~/.config/nvim/coc/unix"
 end
 
- -- Coc-explorer
+-- Coc-explorer
 vim.api.nvim_set_keymap('n', '<space>e', '<Cmd>CocCommand explorer<CR>', {})
 
 -- Coc-snippets
@@ -110,12 +105,6 @@ imap <C-l> <Plug>(coc-snippets-expand)
 " Use <C-j> for select text for visual placeholder of snippet.
 vmap <C-j> <Plug>(coc-snippets-select)
     ]]
--- Use <C-j> for jump to next placeholder, it's default of coc.nvim
-vim.g.coc_snippet_next = '<C-j>'
-
--- Use <C-k> for jump to previous placeholder, it's default of coc.nvim
-vim.g.coc_snippet_prev = '<C-k>'
-
 vim.cmd [[
 " Use <C-j> for both expand and jump (make expand higher priority.)
 imap <C-j> <Plug>(coc-snippets-expand-jump)
@@ -123,14 +112,16 @@ imap <C-j> <Plug>(coc-snippets-expand-jump)
 " Use <leader>x for convert visual selected code to snippet
 xmap <leader>x  <Plug>(coc-convert-snippet)
 ]]
-if vim.fn.has('unix') == 1 then
-end
 
+-- VimTeX
+if vim.fn.has('unix') == 1 then
+    vim.g.vimtex_view_method = 'zathura'
+end
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
     vim.g.python3_host_prog = 'C:/Users/akima/AppData/Local/Programs/Python/Python311/python.exe'
     vim.g.vimtex_compiler_progname = 'nvr'
     vim.g.vimtex_view_general_viewer = "C:/Users/akima/AppData/Local/SumatraPDF/SumatraPDF.exe"
     vim.g.vimtex_view_general_options ='-reuse-instance -forward-search @tex @line @pdf'
-    vim.cmd "let g:vimtex_compiler_latexmk_engines = { '_' : '-lualatex' }"
 end
+vim.cmd "let g:vimtex_compiler_latexmk_engines = { '_' : '-lualatex' }"
 
