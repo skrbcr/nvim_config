@@ -54,6 +54,9 @@ vim.api.nvim_set_keymap('n', ']b', ':bnext<CR>', { silent = true, noremap = true
 vim.api.nvim_set_keymap('n', '[b', ':bprev<CR>', { silent = true, noremap = true })
 vim.api.nvim_set_keymap('n', 'M-v', '<C-v>', { noremap = true })
 vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<C-s>', ':MarkdownPreview<CR>', { silent = true, noremap = true })
+vim.api.nvim_set_keymap('n', '<M-s>', ':MarkdownPreviewStop<CR>', { silent = true, noremap = true })
+vim.api.nvim_set_keymap('n', '<C-p>', ':MarkdownPreviewToggle<CR>', { silent = true, noremap = true })
  
 --[[ plugins ]]--
 require('plugins')

@@ -39,6 +39,7 @@ return require('packer').startup(function(use)
     use 'tpope/vim-commentary'
     use 'ryanoasis/vim-devicons'
     use 'lervag/vimtex'
+    use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
     
     -- Linux 専用
     if vim.fn.has('unix') == 1 then
