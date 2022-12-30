@@ -44,7 +44,12 @@ vim.bo.sts = 4
 -- -- Tabの表示幅
 vim.bo.ts = 4
 vim.o.cot = 'menuone', 'noinsert'
-if vim.fn.has('unix') then
+
+if vim.fn.has('unix') == 1 then
+    vim.g.python3_host_prog = '/usr/local/bin/python3'
+end
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+    vim.g.python3_host_prog ="C:\\Users\\akima\\AppData\\Local\\Programs\\Python\\Python311\\python.exe"
 end
 
 -- [[ Key Maps ]] --
