@@ -111,6 +111,9 @@ require('lualine').setup {
 if vim.fn.has('unix') == 1 then
     vim.g.coc_config_home = "~/.config/nvim/coc/unix"
 end
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+    vim.g.coc_config_home = "coc/windows"
+end
 
 -- Coc-explorer
 vim.api.nvim_set_keymap('n', '<space>e', '<Cmd>CocCommand explorer<CR>', {})
