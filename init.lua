@@ -46,7 +46,8 @@ vim.bo.ts = 4
 vim.o.cot = 'menuone', 'noinsert'
 
 if vim.fn.has('unix') == 1 then
-    vim.g.python3_host_prog = '/usr/local/bin/python3'
+    vim.g.python3_host_prog = 'python3'
+    vim.opt.clipboard = unnamedplus
 end
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
     vim.g.python3_host_prog ="python.exe"
@@ -68,6 +69,9 @@ vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', { noremap = true })
 vim.api.nvim_set_keymap('n', '<C-s>', ':MarkdownPreview<CR>', { silent = true, noremap = true })
 vim.api.nvim_set_keymap('n', '<M-s>', ':MarkdownPreviewStop<CR>', { silent = true, noremap = true })
 vim.api.nvim_set_keymap('n', '<C-p>', ':MarkdownPreviewToggle<CR>', { silent = true, noremap = true })
+vim.api.nvim_set_keymap('v', '<leader>c', '"+y', { silent=true, noremap=true }) 
+vim.api.nvim_set_keymap('n', '<leader>v', '"+p', { silent=true, noremap=true }) 
+vim.api.nvim_set_keymap('v', '<leader>v', '"+p', { silent=true, noremap=true }) 
  
 --[[ plugins ]]--
 require('plugins')

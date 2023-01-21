@@ -1,5 +1,5 @@
 {
+  "explorer.file.showHiddenFiles": true,
   "languageserver": {
   },
-  "clangd.path" = "clangd",
 }
