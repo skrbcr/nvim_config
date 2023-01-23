@@ -38,13 +38,13 @@ return require('packer').startup(function(use)
     use {'neoclide/coc.nvim', branch = 'release'}
     use 'tpope/vim-commentary'
     use 'ryanoasis/vim-devicons'
-    use 'lervag/vimtex'
     use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
     
     -- Linux 専用
     if vim.fn.has('unix') == 1 then
         use 'cdelledonne/vim-cmake'
         use 'pappasam/coc-jedi'
+        use 'lervag/vimtex'
     end
     -- windows 専用
     if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
