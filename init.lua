@@ -45,8 +45,8 @@ vim.bo.sts = 4
 vim.bo.ts = 4
 vim.o.cot = 'menuone', 'noinsert'
 
--- goneovim
-vim.o.gfn = 'PlemolJP Console NF Medium:h12'
+-- gui
+vim.o.gfn = 'PlemolJP Console NF Medium:h9'
 
 if vim.fn.has('unix') == 1 then
     vim.g.python3_host_prog = 'python3'
