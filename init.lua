@@ -59,6 +59,9 @@ if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
     vim.o.shellxquote = ""
 end
 
+vim.cmd 'let g:loaded_ruby_provider = 0'
+vim.cmd 'let g:loaded_perl_provider = 0'
+
 -- [[ Key Maps ]] --
 vim.api.nvim_set_keymap('i', '<CR>', '<C-y>', { noremap = true })
 vim.cmd 'inoremap <silent><expr> <Enter> coc#pum#visible() ? coc#pum#confirm() : "\\<Enter>"'
