@@ -24,26 +24,29 @@ vim.o.background = 'dark'
 vim.o.smd = false
 -- カーソルline
 vim.wo.cul = true
--- -- シンタックス
+-- シンタックス
 vim.bo.syn = 'ON'
--- -- 括弧入力時に対応する括弧を表示
+-- 括弧入力時に対応する括弧を表示
 -- set showmatch
--- -- 検索ハイライト
+-- 検索ハイライト
 vim.o.hls = true
--- -- インクリメントサーチ
+-- インクリメントサーチ
 vim.o.is = true
--- -- 自動インデント
+-- 自動インデント
 vim.bo.si = true
 vim.bo.ai = true
--- -- Tabは半角スペース
+-- Tabは半角スペース
 vim.bo.et = true
--- -- インデント幅
+-- インデント幅
 vim.bo.sw = 4
--- -- Tab挿入時の文字幅
+-- Tab挿入時の文字幅
 vim.bo.sts = 4
--- -- Tabの表示幅
+-- Tabの表示幅
 vim.bo.ts = 4
 vim.o.cot = 'menuone', 'noinsert'
+
+-- gui
+vim.o.gfn = 'PlemolJP Console NF Medium:h9'
 
 if vim.fn.has('unix') == 1 then
     vim.g.python3_host_prog = 'python3'
@@ -140,11 +143,6 @@ xmap <leader>x  <Plug>(coc-convert-snippet)
 -- VimTeX
 if vim.fn.has('unix') == 1 then
     vim.g.vimtex_view_method = 'zathura'
+    vim.g.vimtex_compiler_latexmk_engines = { _ = '-lualatex' }
 end
-if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
-    -- vim.g.vimtex_compiler_progname = 'nvr'
-    vim.g.vimtex_view_general_viewer = "C:/Users/akima/AppData/Local/SumatraPDF/SumatraPDF.exe"
-    vim.g.vimtex_view_general_options ='-reuse-instance -forward-search @tex @line @pdf'
-end
-vim.g.vimtex_compiler_latexmk_engines = { _ = '-lualatex' }
 
