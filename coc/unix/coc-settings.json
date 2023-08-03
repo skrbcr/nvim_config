@@ -9,6 +9,11 @@
         "cache": {
           "directory": ".ccls-cache"
         },
+        "clang": {
+          "extraArgs": [
+            "$HOME/atcoder/atcoder"
+          ]
+        },
         "client": {
           "snippetSupport": true
         }
