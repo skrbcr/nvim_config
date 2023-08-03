@@ -85,31 +85,14 @@ vim.cmd "set statusline^=%{coc#status()}"
 vim.cmd "autocmd User CocStatusChange redrawstatus"
 
 -- カラースキーム
-require("catppuccin").setup({
-    flavour = "mocha",
-    styles = {
-        comments = {},
-    },
-    color_overrides = {
-        all = {
-            comment = "#808080",
-        },
-    },
-    custom_highlights = function(colors)
-        return {
-            Comment = { fg = colors.comment },
-            LineNr = { fg = colors.comment }
-        }
-    end,
-    integrations = {
-        neotree = true,
-    },
+require('tokyonight').setup({
+    style = 'moon',
 })
-vim.cmd 'colorscheme catppuccin'
+vim.cmd 'colorscheme tokyonight'
 require('lualine').setup {
   options = {
     icons_enabled = true,
-    theme = 'catppuccin',
+    theme = 'tokyonight',
     globalstatus = true,
   }
 }

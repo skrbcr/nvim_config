@@ -7,6 +7,12 @@ return require('packer').startup(function(use)
     use 'sheerun/vim-polyglot'
     use { "catppuccin/nvim", as = "catppuccin" }
     use {
+        "folke/tokyonight.nvim",
+        lazy = false,
+        priority = 1000,
+        opts = {}
+    }
+    use {
     	'nvim-lualine/lualine.nvim',
     	requires = { 'kyazdani42/nvim-web-devicons', opt = true }
     }
