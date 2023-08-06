@@ -11,6 +11,10 @@ vim.o.ar = true
 -- 入力中のコマンドをステータスに表示
 vim.o.sc = true
 vim.cmd 'filetype plugin indent on'
+-- 更新時間
+vim.o.updatetime = 300
+-- signcolumn
+-- vim.wo.signcolumn = yes
 
 -- 行番号を表示
 vim.wo.nu = true
@@ -79,10 +83,11 @@ vim.api.nvim_set_keymap('v', '<leader>c', '"+y', { silent=true, noremap=true })
 vim.api.nvim_set_keymap('n', '<leader>v', '"+p', { silent=true, noremap=true }) 
 vim.api.nvim_set_keymap('v', '<leader>v', '"+p', { silent=true, noremap=true }) 
  
---[[ plugins ]]--
+-- plugins
 require('plugins')
 vim.cmd "set statusline^=%{coc#status()}"
 vim.cmd "autocmd User CocStatusChange redrawstatus"
+require('bufferline').setup{}
 
 -- カラースキーム
 require('tokyonight').setup({
@@ -97,6 +102,9 @@ require('lualine').setup {
   }
 }
 
+--
+-- Coc
+-- 
 if vim.fn.has('unix') == 1 then
     vim.g.coc_config_home = "~/.config/nvim/coc/unix"
 end
@@ -104,24 +112,41 @@ if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
     vim.g.coc_config_home = "coc/windows"
 end
 
+local keyset = vim.keymap.set
+-- Autocomplete
+function _G.check_back_space()
+    local col = vim.fn.col('.') - 1
+    return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') ~= nil
+end
+
+-- Use Tab for trigger completion with characters ahead and navigate
+local opts = {silent = true, noremap = true, expr = true, replace_keycodes = false}
+keyset("i", "<TAB>", 'coc#pum#visible() ? coc#pum#next(1) : v:lua.check_back_space() ? "<TAB>" : coc#refresh()', opts)
+keyset("i", "<S-TAB>", [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], opts)
+-- Make <CR> to accept selected completion item or notify coc.nvim to format
+keyset("i", "<cr>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
+-- Use <c-j> to trigger snippets
+keyset("i", "<c-j>", "<Plug>(coc-snippets-expand-jump)")
+-- Use <c-space> to trigger completion
+keyset("i", "<c-space>", "coc#refresh()", {silent = true, expr = true})
+
+-- Highlight the symbol and its references on a CursorHold event(cursor is idle)
+vim.api.nvim_create_augroup("CocGroup", {})
+vim.api.nvim_create_autocmd("CursorHold", {
+    group = "CocGroup",
+    command = "silent call CocActionAsync('highlight')",
+    desc = "Highlight symbol under cursor on CursorHold"
+})
+
+-- Symbol renaming
+keyset("n", "<leader>rn", "<Plug>(coc-rename)", {silent = true})
+
+-- Formatting selected code
+keyset("x", "<leader>f", "<Plug>(coc-format-selected)", {silent = true})
+keyset("n", "<leader>f", "<Plug>(coc-format-selected)", {silent = true})
+
 -- Coc-explorer
 vim.api.nvim_set_keymap('n', '<space>e', '<Cmd>CocCommand explorer<CR>', {})
-
--- Coc-snippets
-vim.cmd [[
-" Use <C-l> for trigger snippet expand.
-imap <C-l> <Plug>(coc-snippets-expand)
-
-" Use <C-j> for select text for visual placeholder of snippet.
-vmap <C-j> <Plug>(coc-snippets-select)
-    ]]
-vim.cmd [[
-" Use <C-j> for both expand and jump (make expand higher priority.)
-imap <C-j> <Plug>(coc-snippets-expand-jump)
-
-" Use <leader>x for convert visual selected code to snippet
-xmap <leader>x  <Plug>(coc-convert-snippet)
-]]
 
 -- VimTeX
 if vim.fn.has('unix') == 1 then

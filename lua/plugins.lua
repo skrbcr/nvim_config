@@ -5,7 +5,6 @@
 return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
     use 'sheerun/vim-polyglot'
-    use { "catppuccin/nvim", as = "catppuccin" }
     use {
         "folke/tokyonight.nvim",
         lazy = false,
@@ -18,28 +17,8 @@ return require('packer').startup(function(use)
     }
     use {
         'akinsho/bufferline.nvim',
-        tag = "v3.*",
+        tag = "*",
         requires = 'nvim-tree/nvim-web-devicons',
-        after = "catppuccin",
-        config = function()
-            local mocha = require("catppuccin.palettes").get_palette "mocha"
-            require("bufferline").setup {
-                highlights = require("catppuccin.groups.integrations.bufferline").get {
-                    styles = { "italic", "bold" },
-                    custom = {
-                    all = {
-                        fill = { bg = "#000000" },
-                    },
-                    mocha = {
-                        background = { fg = mocha.text },
-                    },
-                    latte = {
-                        background = { fg = "#000000" },
-                    },
-                },
-            },
-        }
-        end
     }
     use {'neoclide/coc.nvim', branch = 'release'}
     use 'tpope/vim-commentary'
@@ -48,9 +27,9 @@ return require('packer').startup(function(use)
     
     -- Linux 専用
     if vim.fn.has('unix') == 1 then
-        use 'cdelledonne/vim-cmake'
         use 'pappasam/coc-jedi'
         use 'lervag/vimtex'
+        use 'cdelledonne/vim-cmake'
     end
     -- windows 専用
     if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
