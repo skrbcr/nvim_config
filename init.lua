@@ -52,12 +52,24 @@ vim.o.cot = 'menuone', 'noinsert'
 -- gui
 vim.o.gfn = 'PlemolJP Console NF Medium:h9'
 
-if vim.fn.has('unix') == 1 then
-    vim.g.python3_host_prog = 'python3'
-    vim.opt.clipboard = unnamedplus
+-- clipboard
+if vim.fn.has('wsl') == 1 then
+    vim.g.clipboard = {
+        name = 'win32yank_wsl',
+        copy = {
+            ['+'] = 'win32yank.exe -i',
+            ['*'] = 'win32yank.exe -i',
+        },
+        paste = {
+            ['+'] = 'win32yank.exe -o',
+            ['*'] = 'win32yank.exe -o',
+        },
+        cache_enabled = true,
+    }
 end
+
+-- terminal on Windows
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
-    vim.g.python3_host_prog ="python.exe"
     vim.o.shell = "pwsh.exe"
     vim.o.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
 	vim.o.shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
@@ -66,10 +78,17 @@ if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
     vim.o.shellxquote = ""
 end
 
+-- python, ruby, perl
+if vim.fn.has('unix') == 1 then
+    vim.g.python3_host_prog = 'python3'
+end
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+    vim.g.python3_host_prog ="python.exe"
+end
 vim.cmd 'let g:loaded_ruby_provider = 0'
 vim.cmd 'let g:loaded_perl_provider = 0'
 
--- [[ Key Maps ]] --
+-- Key Maps
 vim.api.nvim_set_keymap('i', '<CR>', '<C-y>', { noremap = true })
 vim.cmd 'inoremap <silent><expr> <Enter> coc#pum#visible() ? coc#pum#confirm() : "\\<Enter>"'
 vim.api.nvim_set_keymap('n', ']b', ':bnext<CR>', { silent = true, noremap = true })
@@ -83,7 +102,9 @@ vim.api.nvim_set_keymap('v', '<leader>c', '"+y', { silent=true, noremap=true })
 vim.api.nvim_set_keymap('n', '<leader>v', '"+p', { silent=true, noremap=true }) 
 vim.api.nvim_set_keymap('v', '<leader>v', '"+p', { silent=true, noremap=true }) 
  
+--
 -- plugins
+--
 require('plugins')
 vim.cmd "set statusline^=%{coc#status()}"
 vim.cmd "autocmd User CocStatusChange redrawstatus"
@@ -101,6 +122,10 @@ require('lualine').setup {
     globalstatus = true,
   }
 }
+
+-- vim-cmake
+vim.cmd "autocmd FileType c,cpp nnoremap <silent> <F7> :CMakeBuild<CR>"
+vim.cmd "autocmd FileType c,cpp nnoremap <silent> <leader>cq :CMakeClose<CR>"
 
 --
 -- Coc
