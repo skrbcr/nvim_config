@@ -127,16 +127,21 @@ require('lualine').setup {
 vim.cmd "autocmd FileType c,cpp nnoremap <silent> <F7> :CMakeBuild<CR>"
 vim.cmd "autocmd FileType c,cpp nnoremap <silent> <leader>cq :CMakeClose<CR>"
 
+-- nvim-treesitter
+require('nvim-treesitter.configs').setup {
+    ensure_installed = { "c", "cpp", "lua", "vim", "vimdoc", "query" },
+    sync_install = false,
+    auto_install = true,
+    ignore_install = {  },
+    highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false,
+    },
+}
+
 --
 -- Coc
 -- 
-if vim.fn.has('unix') == 1 then
-    vim.g.coc_config_home = "~/.config/nvim/coc/unix"
-end
-if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
-    vim.g.coc_config_home = "coc/windows"
-end
-
 local keyset = vim.keymap.set
 -- Autocomplete
 function _G.check_back_space()

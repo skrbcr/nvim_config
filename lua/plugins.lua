@@ -1,6 +1,6 @@
 return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
-    use 'sheerun/vim-polyglot'
+    use {'nvim-treesitter/nvim-treesitter', run = ":TSUpdate"}
     use {
         "folke/tokyonight.nvim",
         lazy = false,
