@@ -129,7 +129,7 @@ vim.cmd "autocmd FileType c,cpp nnoremap <silent> <leader>cq :CMakeClose<CR>"
 
 -- nvim-treesitter
 require('nvim-treesitter.configs').setup {
-    ensure_installed = { "c", "cpp", "lua", "vim", "vimdoc", "query" },
+    -- ensure_installed = { "c", "cpp", "lua", "vim", "vimdoc", "query" },
     sync_install = false,
     auto_install = true,
     ignore_install = {  },
