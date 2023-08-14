@@ -14,7 +14,7 @@ vim.cmd 'filetype plugin indent on'
 -- 更新時間
 vim.o.updatetime = 300
 -- signcolumn
--- vim.wo.signcolumn = yes
+vim.wo.signcolumn = "yes"
 
 -- 行番号を表示
 vim.wo.nu = true
@@ -106,8 +106,10 @@ vim.api.nvim_set_keymap('v', '<leader>v', '"+p', { silent=true, noremap=true })
 -- plugins
 --
 require('plugins')
-vim.cmd "set statusline^=%{coc#status()}"
-vim.cmd "autocmd User CocStatusChange redrawstatus"
+-- vim.cmd "set statusline^=%{coc#status()}"
+-- vim.cmd "autocmd User CocStatusChange redrawstatus"
+
+-- bufferline
 require('bufferline').setup{}
 
 -- カラースキーム
