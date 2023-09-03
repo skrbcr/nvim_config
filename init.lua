@@ -1,15 +1,16 @@
--- vim.g.loaded_netrw = 1
--- vim.g.loaded_netrwPlugin = 1
+--
+-- General
+--
 -- 文字コード
-vim.bo.fenc = 'utf-8'
+vim.bo.fileencoding = 'utf-8'
 -- バックアップファイルを作らない
-vim.o.bk = false
+vim.o.backup = false
 -- スワップファイルを作らない
-vim.bo.swf = false
+vim.bo.swapfile = false
 -- 編集中のファイルが変更されたら自動で読み直す
-vim.o.ar = true
+vim.o.autoread = true
 -- 入力中のコマンドをステータスに表示
-vim.o.sc = true
+vim.o.showcmd = true
 vim.cmd 'filetype plugin indent on'
 -- 更新時間
 vim.o.updatetime = 300
@@ -17,23 +18,23 @@ vim.o.updatetime = 300
 vim.wo.signcolumn = "yes"
 
 -- 行番号を表示
-vim.wo.nu = true
-vim.wo.rnu = true
+vim.wo.number = true
+vim.wo.relativenumber = true
 -- ステータスライン
-vim.o.ls = 2
+vim.o.laststatus = 2
 -- 色設定
-vim.o.tgc = true
+vim.o.termguicolors = true
 vim.o.background = 'dark'
 -- モードの表示をしない
-vim.o.smd = false
+vim.o.showmode = false
 -- カーソルline
-vim.wo.cul = true
+vim.wo.cursorline = true
 -- シンタックス
-vim.bo.syn = 'ON'
+vim.bo.syntax = 'ON'
 -- 括弧入力時に対応する括弧を表示
 -- set showmatch
 -- 検索ハイライト
-vim.o.hls = true
+vim.o.hlsearch = true
 -- インクリメントサーチ
 vim.o.is = true
 -- 自動インデント
@@ -88,19 +89,6 @@ end
 vim.cmd 'let g:loaded_ruby_provider = 0'
 vim.cmd 'let g:loaded_perl_provider = 0'
 
--- Key Maps
-vim.api.nvim_set_keymap('i', '<CR>', '<C-y>', { noremap = true })
-vim.cmd 'inoremap <silent><expr> <Enter> coc#pum#visible() ? coc#pum#confirm() : "\\<Enter>"'
-vim.api.nvim_set_keymap('n', ']b', ':bnext<CR>', { silent = true, noremap = true })
-vim.api.nvim_set_keymap('n', '[b', ':bprev<CR>', { silent = true, noremap = true })
-vim.api.nvim_set_keymap('n', 'M-v', '<C-v>', { noremap = true })
-vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', { noremap = true })
-vim.api.nvim_set_keymap('n', '<C-s>', ':MarkdownPreview<CR>', { silent = true, noremap = true })
-vim.api.nvim_set_keymap('n', '<M-s>', ':MarkdownPreviewStop<CR>', { silent = true, noremap = true })
-vim.api.nvim_set_keymap('n', '<C-p>', ':MarkdownPreviewToggle<CR>', { silent = true, noremap = true })
-vim.api.nvim_set_keymap('v', '<leader>c', '"+y', { silent=true, noremap=true }) 
-vim.api.nvim_set_keymap('n', '<leader>v', '"+p', { silent=true, noremap=true }) 
-vim.api.nvim_set_keymap('v', '<leader>v', '"+p', { silent=true, noremap=true }) 
  
 --
 -- plugins
@@ -134,6 +122,7 @@ local list_plugins = {
     'tpope/vim-commentary',
     'ryanoasis/vim-devicons',
     { 'iamcco/markdown-preview.nvim', run = 'cd app && npm install', setup = function() vim.g.mkdp_filetypes = { 'markdown' } end, ft = { 'markdown' }, },
+    'lewis6991/gitsigns.nvim',
 }
 if (vim.fn.has('wsl') == 1) then
     table.insert(list_plugins, {
@@ -149,7 +138,7 @@ require('lazy').setup(list_plugins)
 -- bufferline
 require('bufferline').setup{}
 
--- カラースキーム
+-- colorscheme
 require('tokyonight').setup({
     style = 'moon',
 })
@@ -178,6 +167,9 @@ require('nvim-treesitter.configs').setup {
         additional_vim_regex_highlighting = false,
     },
 }
+
+-- gitsigns.nvim
+require('gitsigns').setup()
 
 --
 -- Coc
@@ -215,12 +207,26 @@ keyset("n", "<leader>rn", "<Plug>(coc-rename)", {silent = true})
 keyset("x", "<leader>f", "<Plug>(coc-format-selected)", {silent = true})
 keyset("n", "<leader>f", "<Plug>(coc-format-selected)", {silent = true})
 
--- Coc-explorer
-vim.api.nvim_set_keymap('n', '<space>e', '<Cmd>CocCommand explorer<CR>', {})
-
 -- VimTeX
 if vim.fn.has('unix') == 1 then
     vim.g.vimtex_view_method = 'zathura'
     vim.g.vimtex_compiler_latexmk_engines = { _ = '-lualatex' }
 end
 
+
+--
+-- Key Maps
+--
+vim.api.nvim_set_keymap('i', '<CR>', '<C-y>', { noremap = true })
+vim.cmd 'inoremap <silent><expr> <Enter> coc#pum#visible() ? coc#pum#confirm() : "\\<Enter>"'
+vim.api.nvim_set_keymap('n', ']b', ':bnext<CR>', { silent = true, noremap = true })
+vim.api.nvim_set_keymap('n', '[b', ':bprev<CR>', { silent = true, noremap = true })
+vim.api.nvim_set_keymap('n', 'M-v', '<C-v>', { noremap = true })
+vim.api.nvim_set_keymap('t', '<ESC>', '<C-\\><C-n>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<C-s>', ':MarkdownPreview<CR>', { silent = true, noremap = true })
+vim.api.nvim_set_keymap('n', '<M-s>', ':MarkdownPreviewStop<CR>', { silent = true, noremap = true })
+vim.api.nvim_set_keymap('n', '<C-p>', ':MarkdownPreviewToggle<CR>', { silent = true, noremap = true })
+vim.api.nvim_set_keymap('v', '<leader>c', '"+y', { silent=true, noremap=true }) 
+vim.api.nvim_set_keymap('n', '<leader>v', '"+p', { silent=true, noremap=true }) 
+vim.api.nvim_set_keymap('v', '<leader>v', '"+p', { silent=true, noremap=true }) 
+vim.api.nvim_set_keymap('n', '<space>e', '<Cmd>CocCommand explorer<CR>', { silent=true, noremap=true })
