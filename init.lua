@@ -105,9 +105,46 @@ vim.api.nvim_set_keymap('v', '<leader>v', '"+p', { silent=true, noremap=true })
 --
 -- plugins
 --
-require('plugins')
--- vim.cmd "set statusline^=%{coc#status()}"
--- vim.cmd "autocmd User CocStatusChange redrawstatus"
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    'git',
+    'clone',
+    '--filter=blob:none',
+    'https://github.com/folke/lazy.nvim.git',
+    '--branch=stable', -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+local list_plugins = {
+    { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' },
+    {
+        'folke/tokyonight.nvim',
+        lazy = false,
+        priority = 1000,
+        opts = {}
+    },
+    {
+    	'nvim-lualine/lualine.nvim',
+    	requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+    },
+    { 'akinsho/bufferline.nvim', version = '*', dependencies = 'nvim-tree/nvim-web-devicons' },
+    { 'neoclide/coc.nvim', branch = 'release' },
+    'tpope/vim-commentary',
+    'ryanoasis/vim-devicons',
+    { 'iamcco/markdown-preview.nvim', run = 'cd app && npm install', setup = function() vim.g.mkdp_filetypes = { 'markdown' } end, ft = { 'markdown' }, },
+}
+if (vim.fn.has('wsl') == 1) then
+    table.insert(list_plugins, {
+        'pappasam/coc-jedi',
+        'lervag/vimtex',
+        'cdelledonne/vim-cmake'
+    })
+end
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+end
+require('lazy').setup(list_plugins)
 
 -- bufferline
 require('bufferline').setup{}
