@@ -20,5 +20,6 @@
       }
     }
   },
-  "snippets.ultisnips.pythonPrompt": false
+  "snippets.ultisnips.pythonPrompt": false,
+  "preferences.formatOnType": true
 }
