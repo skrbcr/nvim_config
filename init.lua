@@ -36,22 +36,22 @@ vim.bo.syntax = 'ON'
 -- 検索ハイライト
 vim.o.hlsearch = true
 -- インクリメントサーチ
-vim.o.is = true
+vim.o.incsearch = true
 -- 自動インデント
-vim.bo.si = true
-vim.bo.ai = true
+vim.bo.smartindent = true
+vim.bo.autoindent = true
 -- Tabは半角スペース
-vim.bo.et = true
+vim.bo.expandtab = true
 -- インデント幅
-vim.bo.sw = 4
+vim.bo.shiftwidth = 4
 -- Tab挿入時の文字幅
-vim.bo.sts = 4
+vim.bo.softtabstop = 4
 -- Tabの表示幅
-vim.bo.ts = 4
-vim.o.cot = 'menuone', 'noinsert'
+vim.bo.tabstop = 4
+vim.o.completeopt = 'menuone', 'noinsert'
 
 -- gui
-vim.o.gfn = 'PlemolJP Console NF Medium:h9'
+vim.o.guifont = 'PlemolJP Console NF Medium:h9'
 
 -- clipboard
 if vim.fn.has('wsl') == 1 then
@@ -157,7 +157,6 @@ vim.cmd "autocmd FileType c,cpp nnoremap <silent> <leader>cq :CMakeClose<CR>"
 
 -- nvim-treesitter
 require('nvim-treesitter.configs').setup {
-    -- ensure_installed = { "c", "cpp", "lua", "vim", "vimdoc", "query" },
     sync_install = false,
     auto_install = true,
     ignore_install = {  },
