@@ -105,7 +105,7 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
-local list_plugins = {
+local plugins = {
     { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' },
     {
         'folke/tokyonight.nvim',
@@ -125,7 +125,7 @@ local list_plugins = {
     'lewis6991/gitsigns.nvim',
 }
 if (vim.fn.has('wsl') == 1) then
-    table.insert(list_plugins, {
+    table.insert(plugins, {
         'pappasam/coc-jedi',
         'lervag/vimtex',
         'cdelledonne/vim-cmake'
@@ -133,7 +133,7 @@ if (vim.fn.has('wsl') == 1) then
 end
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
 end
-require('lazy').setup(list_plugins)
+require('lazy').setup(plugins)
 
 -- bufferline
 require('bufferline').setup{}
@@ -162,7 +162,7 @@ require('nvim-treesitter.configs').setup {
     ignore_install = {  },
     highlight = {
         enable = true,
-        disable = { "latex" },
+        disable = { "latex", "markdown" },
         additional_vim_regex_highlighting = false,
     },
 }
