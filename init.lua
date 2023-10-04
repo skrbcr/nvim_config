@@ -1,52 +1,30 @@
 --
 -- General
 --
--- 文字コード
 vim.bo.fileencoding = 'utf-8'
--- バックアップファイルを作らない
+vim.o.fileencodings = 'sjis', 'default'
 vim.o.backup = false
--- スワップファイルを作らない
 vim.bo.swapfile = false
--- 編集中のファイルが変更されたら自動で読み直す
 vim.o.autoread = true
--- 入力中のコマンドをステータスに表示
 vim.o.showcmd = true
 vim.cmd 'filetype plugin indent on'
--- 更新時間
 vim.o.updatetime = 300
--- signcolumn
 vim.wo.signcolumn = "yes"
-
--- 行番号を表示
 vim.wo.number = true
 vim.wo.relativenumber = true
--- ステータスライン
 vim.o.laststatus = 2
--- 色設定
 vim.o.termguicolors = true
 vim.o.background = 'dark'
--- モードの表示をしない
 vim.o.showmode = false
--- カーソルline
 vim.wo.cursorline = true
--- シンタックス
 vim.bo.syntax = 'ON'
--- 括弧入力時に対応する括弧を表示
--- set showmatch
--- 検索ハイライト
 vim.o.hlsearch = true
--- インクリメントサーチ
 vim.o.incsearch = true
--- 自動インデント
 vim.bo.smartindent = true
 vim.bo.autoindent = true
--- Tabは半角スペース
 vim.bo.expandtab = true
--- インデント幅
 vim.bo.shiftwidth = 4
--- Tab挿入時の文字幅
 vim.bo.softtabstop = 4
--- Tabの表示幅
 vim.bo.tabstop = 4
 vim.o.completeopt = 'menuone', 'noinsert'
 
@@ -93,6 +71,8 @@ vim.cmd 'let g:loaded_perl_provider = 0'
 --
 -- plugins
 --
+
+-- Lazy
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -135,7 +115,7 @@ if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
 end
 require('lazy').setup(plugins)
 
--- bufferline
+-- Bufferline
 require('bufferline').setup{}
 
 -- colorscheme
@@ -170,6 +150,7 @@ require('nvim-treesitter.configs').setup {
 -- gitsigns.nvim
 require('gitsigns').setup()
 
+
 --
 -- Coc
 -- 
@@ -182,7 +163,8 @@ end
 
 -- Use Tab for trigger completion with characters ahead and navigate
 local opts = {silent = true, noremap = true, expr = true, replace_keycodes = false}
-keyset("i", "<TAB>", 'coc#pum#visible() ? coc#pum#next(1) : v:lua.check_back_space() ? "<TAB>" : coc#refresh()', opts)
+-- keyset("i", "<TAB>", 'coc#pum#visible() ? coc#pum#next(1) : v:lua.check_back_space() ? "<TAB>" : coc#refresh()', opts)
+keyset("i", "<TAB>", 'coc#pum#visible() ? coc#pum#next(1) : "<Tab>"', opts)
 keyset("i", "<S-TAB>", [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], opts)
 -- Make <CR> to accept selected completion item or notify coc.nvim to format
 keyset("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
@@ -230,3 +212,4 @@ vim.api.nvim_set_keymap('v', '<leader>c', '"+y', { silent=true, noremap=true })
 vim.api.nvim_set_keymap('n', '<leader>v', '"+p', { silent=true, noremap=true }) 
 vim.api.nvim_set_keymap('v', '<leader>v', '"+p', { silent=true, noremap=true }) 
 vim.api.nvim_set_keymap('n', '<space>e', '<Cmd>CocCommand explorer<CR>', { silent=true, noremap=true })
+
