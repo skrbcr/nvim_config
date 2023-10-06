@@ -58,7 +58,10 @@ if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
 end
 
 -- python, ruby, perl
-if vim.fn.has('unix') == 1 then
+if vim.fn.has('wsl') == 1 then
+    vim.g.python3_host_prog = 'python3'
+end
+if vim.fn.has('linux') == 1 then
     vim.g.python3_host_prog = 'python3'
 end
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
@@ -86,7 +89,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 local plugins = {
-    { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' },
+    { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
     {
         'folke/tokyonight.nvim',
         lazy = false,
@@ -95,13 +98,19 @@ local plugins = {
     },
     {
     	'nvim-lualine/lualine.nvim',
-    	requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+    	dependencies = { 'nvim-tree/nvim-web-devicons', opt = true }
     },
     { 'akinsho/bufferline.nvim', version = '*', dependencies = 'nvim-tree/nvim-web-devicons' },
     { 'neoclide/coc.nvim', branch = 'release' },
     'tpope/vim-commentary',
     'ryanoasis/vim-devicons',
-    { 'iamcco/markdown-preview.nvim', run = 'cd app && npm install', setup = function() vim.g.mkdp_filetypes = { 'markdown' } end, ft = { 'markdown' }, },
+    {
+        'iamcco/markdown-preview.nvim',
+        ft = 'markdown',
+        build = function()
+            vim.fn["mkdp#util#install"]()
+        end,
+    },
     'lewis6991/gitsigns.nvim',
 }
 if (vim.fn.has('wsl') == 1) then
@@ -189,7 +198,7 @@ keyset("x", "<leader>f", "<Plug>(coc-format-selected)", {silent = true})
 keyset("n", "<leader>f", "<Plug>(coc-format-selected)", {silent = true})
 
 -- VimTeX
-if vim.fn.has('unix') == 1 then
+if vim.fn.has('wsl') == 1 then
     vim.g.vimtex_view_method = 'zathura'
     vim.g.vimtex_compiler_latexmk_engines = { _ = '-lualatex' }
 end
