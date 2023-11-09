@@ -199,7 +199,7 @@ keyset("n", "<leader>f", "<Plug>(coc-format-selected)", {silent = true})
 
 -- VimTeX
 if vim.fn.has('wsl') == 1 then
-    vim.g.vimtex_view_method = 'zathura'
+    vim.g.vimtex_view_general_viewer = 'SumatraPDF.exe'
     vim.g.vimtex_compiler_latexmk_engines = { _ = '-lualatex' }
 end
 
