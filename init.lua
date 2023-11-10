@@ -129,7 +129,7 @@ require('bufferline').setup{}
 
 -- colorscheme
 require('tokyonight').setup({
-    style = 'moon',
+    style = 'night',
 })
 vim.cmd 'colorscheme tokyonight'
 require('lualine').setup {
