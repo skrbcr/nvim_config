@@ -151,7 +151,7 @@ require('nvim-treesitter.configs').setup {
     ignore_install = {  },
     highlight = {
         enable = true,
-        disable = { "latex", "markdown" },
+        disable = { "latex" },
         additional_vim_regex_highlighting = false,
     },
 }
