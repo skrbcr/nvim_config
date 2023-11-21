@@ -59,16 +59,14 @@ end
 
 -- python, ruby, perl
 if vim.fn.has('wsl') == 1 then
-    vim.g.python3_host_prog = 'python'
-end
-if vim.fn.has('linux') == 1 then
-    vim.g.python3_host_prog = 'python'
+    vim.g.python3_host_prog ="python3"
+    vim.cmd 'let g:loaded_perl_provider = 0'
 end
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
     vim.g.python3_host_prog ="python.exe"
+    vim.cmd 'let g:loaded_ruby_provider = 0'
+    vim.cmd 'let g:loaded_perl_provider = 0'
 end
-vim.cmd 'let g:loaded_ruby_provider = 0'
-vim.cmd 'let g:loaded_perl_provider = 0'
 
  
 --
