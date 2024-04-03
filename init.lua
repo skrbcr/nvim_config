@@ -197,6 +197,9 @@ keyset("n", "<leader>rn", "<Plug>(coc-rename)", {silent = true})
 keyset("x", "<leader>f", "<Plug>(coc-format-selected)", {silent = true})
 keyset("n", "<leader>f", "<Plug>(coc-format-selected)", {silent = true})
 
+-- coc-prettier
+vim.cmd("command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument")
+
 -- VimTeX
 if vim.fn.has('wsl') == 1 then
     vim.g.vimtex_view_general_viewer = 'SumatraPDF.exe'
