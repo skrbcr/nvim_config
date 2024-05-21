@@ -29,7 +29,11 @@ vim.bo.tabstop = 4
 vim.o.completeopt = 'menuone', 'noinsert'
 
 -- gui
-vim.o.guifont = 'PlemolJP Console NF Medium:h9'
+vim.o.guifont = 'PlemolJP Console NF:h12'
+if vim.g.neovide then
+    vim.g.neovide_refresh_rate = 60
+    vim.g.neovide_refresh_rate_idle = 5
+end
 
 -- clipboard
 if vim.fn.has('wsl') == 1 then
