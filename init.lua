@@ -29,7 +29,7 @@ vim.bo.tabstop = 4
 vim.o.completeopt = 'menuone', 'noinsert'
 
 -- gui
-vim.o.guifont = 'PlemolJP Console NF:h12'
+vim.o.guifont = 'PlemolJP Console NF:h9'
 if vim.g.neovide then
     vim.g.neovide_refresh_rate = 60
     vim.g.neovide_refresh_rate_idle = 5
@@ -125,10 +125,12 @@ if (vim.fn.has('wsl') == 1) then
     })
 end
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+    table.insert(plugins, {
+        { 'LhKipp/nvim-nu', build = 'TSInstall nu', dependencies = 'jose-elias-alvarez/null-ls.nvim' },
+    })
 end
-require('lazy').setup(plugins)
 
--- Bufferline
+require('lazy').setup(plugins)
 require('bufferline').setup{}
 
 -- colorscheme
