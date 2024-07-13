@@ -29,7 +29,11 @@ vim.bo.tabstop = 4
 vim.o.completeopt = 'menuone', 'noinsert'
 
 -- gui
-vim.o.guifont = 'PlemolJP Console NF Medium:h9'
+vim.o.guifont = 'PlemolJP Console NF:h9'
+if vim.g.neovide then
+    vim.g.neovide_refresh_rate = 60
+    vim.g.neovide_refresh_rate_idle = 5
+end
 
 -- clipboard
 if vim.fn.has('wsl') == 1 then
@@ -49,7 +53,7 @@ end
 
 -- terminal on Windows
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
-    vim.o.shell = "pwsh.exe"
+    vim.o.shell = "nu.exe"
     vim.o.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
 	vim.o.shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
 	vim.o.shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
@@ -121,10 +125,12 @@ if (vim.fn.has('wsl') == 1) then
     })
 end
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+    table.insert(plugins, {
+        { 'LhKipp/nvim-nu', build = 'TSInstall nu', dependencies = 'jose-elias-alvarez/null-ls.nvim' },
+    })
 end
-require('lazy').setup(plugins)
 
--- Bufferline
+require('lazy').setup(plugins)
 require('bufferline').setup{}
 
 -- colorscheme
