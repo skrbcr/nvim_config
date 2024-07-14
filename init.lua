@@ -25,7 +25,8 @@ vim.bo.autoindent = true
 vim.bo.expandtab = true
 vim.bo.shiftwidth = 4
 vim.bo.softtabstop = 4
-vim.bo.tabstop = 4
+vim.bo.tabstop = 8
+vim.bo.expandtab = true
 vim.o.completeopt = 'menuone', 'noinsert'
 
 -- gui
@@ -116,6 +117,8 @@ local plugins = {
         ft = { "markdown" },
     },
     'lewis6991/gitsigns.nvim',
+    'kevinhwang91/nvim-hlslens',
+    -- 'LuaLS/lua-language-server',
 }
 if (vim.fn.has('wsl') == 1) then
     table.insert(plugins, {
@@ -162,9 +165,25 @@ require('nvim-treesitter.configs').setup {
     },
 }
 
--- gitsigns.nvim
 require('gitsigns').setup()
 
+-- hlsearch
+require('hlslens').setup()
+
+local kopts = {noremap = true, silent = true}
+
+vim.api.nvim_set_keymap('n', 'n',
+    [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]],
+    kopts)
+vim.api.nvim_set_keymap('n', 'N',
+    [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]],
+    kopts)
+vim.api.nvim_set_keymap('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+
+-- vim.api.nvim_set_keymap('n', '<Leader>nh', '<Cmd>noh<CR>', kopts)
 
 --
 -- Coc
