@@ -119,12 +119,12 @@ local plugins = {
     'lewis6991/gitsigns.nvim',
     'kevinhwang91/nvim-hlslens',
     -- 'LuaLS/lua-language-server',
+    'cdelledonne/vim-cmake',
+    'pappasam/coc-jedi',
 }
 if (vim.fn.has('wsl') == 1) then
     table.insert(plugins, {
-        'pappasam/coc-jedi',
         'lervag/vimtex',
-        'cdelledonne/vim-cmake'
     })
 end
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
