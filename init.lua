@@ -28,6 +28,7 @@ vim.bo.softtabstop = 4
 vim.bo.tabstop = 8
 vim.bo.expandtab = true
 vim.o.completeopt = 'menuone', 'noinsert'
+vim.o.mousemoveevent = true
 
 -- gui
 vim.o.guifont = 'PlemolJP Console NF:h9'
@@ -94,10 +95,10 @@ vim.opt.rtp:prepend(lazypath)
 local plugins = {
     { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
     {
-        'folke/tokyonight.nvim',
-        lazy = false,
-        priority = 1000,
-        opts = {}
+      "folke/tokyonight.nvim",
+      lazy = false,
+      priority = 1000,
+      opts = {},
     },
     {
     	'nvim-lualine/lualine.nvim',
@@ -105,6 +106,16 @@ local plugins = {
     },
     { 'akinsho/bufferline.nvim', version = '*', dependencies = 'nvim-tree/nvim-web-devicons' },
     { 'neoclide/coc.nvim', branch = 'release' },
+    {
+        "nvim-neo-tree/neo-tree.nvim",
+        branch = "v3.x",
+        dependencies = {
+          "nvim-lua/plenary.nvim",
+          "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+          "MunifTanjim/nui.nvim",
+          -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+        }
+    },
     'tpope/vim-commentary',
     'ryanoasis/vim-devicons',
     {
@@ -134,13 +145,39 @@ if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
 end
 
 require('lazy').setup(plugins)
-require('bufferline').setup{}
 
 -- colorscheme
-require('tokyonight').setup({
-    style = 'night',
-})
-vim.cmd 'colorscheme tokyonight'
+require('tokyonight').setup {}
+vim.cmd[[colorscheme tokyonight-night]]
+require('neo-tree').setup {
+    filesystem = {
+        filtered_items = {
+            hide_dotfiles = false,
+            hide_gitignored = false,
+            hide_hidden = false,
+        }
+    },
+}
+
+require('bufferline').setup{
+    options = {
+        separator_style = "slant",
+        hover = {
+            enabled = true,
+            delay = 0,
+            reveal = { 'close' },
+        },
+        offsets = {
+            {
+                filetype = "NvimTree",
+                text = "File Explorer",
+                highlight = "Directory",
+                text_align = "left",
+                separator = true,
+            }
+        },
+    },
+}
 require('lualine').setup {
   options = {
     icons_enabled = true,
@@ -253,5 +290,5 @@ vim.api.nvim_set_keymap('n', '<C-p>', ':MarkdownPreviewToggle<CR>', { silent = t
 vim.api.nvim_set_keymap('v', '<leader>c', '"+y', { silent=true, noremap=true }) 
 vim.api.nvim_set_keymap('n', '<leader>v', '"+p', { silent=true, noremap=true }) 
 vim.api.nvim_set_keymap('v', '<leader>v', '"+p', { silent=true, noremap=true }) 
-vim.api.nvim_set_keymap('n', '<space>e', '<Cmd>CocCommand explorer<CR>', { silent=true, noremap=true })
+vim.api.nvim_set_keymap('n', '<space>e', ':Neotree<CR>', { silent=true, noremap=true })
 
