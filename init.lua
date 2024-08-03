@@ -266,6 +266,7 @@ vim.cmd("command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument")
 if vim.fn.has('wsl') == 1 then
     vim.g.vimtex_view_general_viewer = 'SumatraPDF.exe'
     vim.g.vimtex_compiler_latexmk_engines = { _ = '-lualatex' }
+    -- Cited from https://qiita.com/sff1019/items/cb8cae96a1f7026656fc
     vim.g.vimtex_compiler_latexmk = {
         options = {
             '-shell-escape'
