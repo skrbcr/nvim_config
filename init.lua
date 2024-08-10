@@ -140,7 +140,6 @@ if (vim.fn.has('wsl') == 1) then
 end
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
     table.insert(plugins, {
-        { 'LhKipp/nvim-nu', build = 'TSInstall nu', dependencies = 'jose-elias-alvarez/null-ls.nvim' },
     })
 end
 
