@@ -31,7 +31,7 @@ vim.o.completeopt = 'menuone', 'noinsert'
 vim.o.mousemoveevent = true
 
 -- gui
-vim.o.guifont = 'PlemolJP Console NF:h9'
+vim.o.guifont = 'PlemolJP Console NF:h13'
 if vim.g.neovide then
     vim.g.neovide_refresh_rate = 60
     vim.g.neovide_refresh_rate_idle = 5
