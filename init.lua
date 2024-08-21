@@ -22,14 +22,15 @@ vim.o.hlsearch = true
 vim.o.incsearch = true
 vim.bo.smartindent = true
 vim.bo.autoindent = true
-vim.bo.expandtab = false
+vim.bo.expandtab = true
 vim.bo.shiftwidth = 4
 vim.bo.softtabstop = 4
 vim.bo.tabstop = 8
 vim.o.completeopt = 'menuone', 'noinsert'
+vim.o.mousemoveevent = true
 
 -- gui
-vim.o.guifont = 'PlemolJP Console NF:h9'
+vim.o.guifont = 'PlemolJP Console NF:h13'
 if vim.g.neovide then
     vim.g.neovide_refresh_rate = 60
     vim.g.neovide_refresh_rate_idle = 5
@@ -53,7 +54,7 @@ end
 
 -- terminal on Windows
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
-    vim.o.shell = "nu.exe"
+    vim.o.shell = "pwsh.exe"
     vim.o.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
 	vim.o.shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
 	vim.o.shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
@@ -87,10 +88,10 @@ vim.opt.rtp:prepend(lazypath)
 local plugins = {
     { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
     {
-        'folke/tokyonight.nvim',
-        lazy = false,
-        priority = 1000,
-        opts = {}
+      "folke/tokyonight.nvim",
+      lazy = false,
+      priority = 1000,
+      opts = {},
     },
     {
     	'nvim-lualine/lualine.nvim',
@@ -98,6 +99,16 @@ local plugins = {
     },
     { 'akinsho/bufferline.nvim', version = '*', dependencies = 'nvim-tree/nvim-web-devicons' },
     { 'neoclide/coc.nvim', branch = 'release' },
+    {
+        "nvim-neo-tree/neo-tree.nvim",
+        branch = "v3.x",
+        dependencies = {
+          "nvim-lua/plenary.nvim",
+          "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+          "MunifTanjim/nui.nvim",
+          -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+        }
+    },
     'tpope/vim-commentary',
     'ryanoasis/vim-devicons',
     {
@@ -110,28 +121,55 @@ local plugins = {
         ft = { "markdown" },
     },
     'lewis6991/gitsigns.nvim',
+    'kevinhwang91/nvim-hlslens',
+    -- 'LuaLS/lua-language-server',
+    'cdelledonne/vim-cmake',
+    'pappasam/coc-jedi',
 }
 if (vim.fn.has('wsl') == 1) then
     table.insert(plugins, {
-        'pappasam/coc-jedi',
         'lervag/vimtex',
-        'cdelledonne/vim-cmake'
     })
 end
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
     table.insert(plugins, {
-        { 'LhKipp/nvim-nu', build = 'TSInstall nu', dependencies = 'jose-elias-alvarez/null-ls.nvim' },
     })
 end
 
 require('lazy').setup(plugins)
-require('bufferline').setup{}
 
 -- colorscheme
-require('tokyonight').setup({
-    style = 'night',
-})
-vim.cmd 'colorscheme tokyonight'
+require('tokyonight').setup {}
+vim.cmd[[colorscheme tokyonight-night]]
+require('neo-tree').setup {
+    filesystem = {
+        filtered_items = {
+            hide_dotfiles = false,
+            hide_gitignored = false,
+            hide_hidden = false,
+        }
+    },
+}
+
+require('bufferline').setup{
+    options = {
+        separator_style = "slant",
+        hover = {
+            enabled = true,
+            delay = 0,
+            reveal = { 'close' },
+        },
+        offsets = {
+            {
+                filetype = "NvimTree",
+                text = "File Explorer",
+                highlight = "Directory",
+                text_align = "left",
+                separator = true,
+            }
+        },
+    },
+}
 require('lualine').setup {
   options = {
     icons_enabled = true,
@@ -156,9 +194,25 @@ require('nvim-treesitter.configs').setup {
     },
 }
 
--- gitsigns.nvim
 require('gitsigns').setup()
 
+-- hlsearch
+require('hlslens').setup()
+
+local kopts = {noremap = true, silent = true}
+
+vim.api.nvim_set_keymap('n', 'n',
+    [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]],
+    kopts)
+vim.api.nvim_set_keymap('n', 'N',
+    [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]],
+    kopts)
+vim.api.nvim_set_keymap('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+
+-- vim.api.nvim_set_keymap('n', '<Leader>nh', '<Cmd>noh<CR>', kopts)
 
 --
 -- Coc
@@ -204,6 +258,12 @@ vim.cmd("command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument")
 if vim.fn.has('wsl') == 1 then
     vim.g.vimtex_view_general_viewer = 'SumatraPDF.exe'
     vim.g.vimtex_compiler_latexmk_engines = { _ = '-lualatex' }
+    -- Cited from https://qiita.com/sff1019/items/cb8cae96a1f7026656fc
+    vim.g.vimtex_compiler_latexmk = {
+        options = {
+            '-shell-escape'
+        }
+    }
 end
 
 
@@ -223,5 +283,5 @@ vim.api.nvim_set_keymap('n', '<C-p>', ':MarkdownPreviewToggle<CR>', { silent = t
 vim.api.nvim_set_keymap('v', '<leader>c', '"+y', { silent=true, noremap=true }) 
 vim.api.nvim_set_keymap('n', '<leader>v', '"+p', { silent=true, noremap=true }) 
 vim.api.nvim_set_keymap('v', '<leader>v', '"+p', { silent=true, noremap=true }) 
-vim.api.nvim_set_keymap('n', '<space>e', '<Cmd>CocCommand explorer<CR>', { silent=true, noremap=true })
+vim.api.nvim_set_keymap('n', '<space>e', ':Neotree<CR>', { silent=true, noremap=true })
 
