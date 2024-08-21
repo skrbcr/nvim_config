@@ -63,7 +63,11 @@ if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
 end
 
 -- python, ruby, perl
-vim.g.python3_host_prog ="/usr/bin/python3.11"
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 or vim.fn.has('wsl') then
+    vim.g.python3_host_prog = 'python3'
+elseif vim.fn.has('linux') then
+    vim.g.python3_host_prog = "/usr/bin/python3.11"
+end
 vim.cmd 'let g:loaded_perl_provider = 0'
 vim.cmd 'let g:loaded_ruby_provider = 0'
 
