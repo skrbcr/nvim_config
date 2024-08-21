@@ -22,10 +22,10 @@ vim.o.hlsearch = true
 vim.o.incsearch = true
 vim.bo.smartindent = true
 vim.bo.autoindent = true
-vim.bo.expandtab = true
+vim.bo.expandtab = false
 vim.bo.shiftwidth = 4
 vim.bo.softtabstop = 4
-vim.bo.tabstop = 4
+vim.bo.tabstop = 8
 vim.o.completeopt = 'menuone', 'noinsert'
 
 -- gui
@@ -62,15 +62,9 @@ if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
 end
 
 -- python, ruby, perl
-if vim.fn.has('wsl') == 1 then
-    vim.g.python3_host_prog ="python3"
-    vim.cmd 'let g:loaded_perl_provider = 0'
-end
-if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
-    vim.g.python3_host_prog ="python.exe"
-    vim.cmd 'let g:loaded_ruby_provider = 0'
-    vim.cmd 'let g:loaded_perl_provider = 0'
-end
+vim.g.python3_host_prog ="/usr/bin/python3.11"
+vim.cmd 'let g:loaded_perl_provider = 0'
+vim.cmd 'let g:loaded_ruby_provider = 0'
 
  
 --
