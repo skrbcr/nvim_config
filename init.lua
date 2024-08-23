@@ -26,12 +26,11 @@ vim.bo.expandtab = true
 vim.bo.shiftwidth = 4
 vim.bo.softtabstop = 4
 vim.bo.tabstop = 8
-vim.bo.expandtab = true
 vim.o.completeopt = 'menuone', 'noinsert'
 vim.o.mousemoveevent = true
 
 -- gui
-vim.o.guifont = 'PlemolJP Console NF:h9'
+vim.o.guifont = 'PlemolJP Console NF:h13'
 if vim.g.neovide then
     vim.g.neovide_refresh_rate = 60
     vim.g.neovide_refresh_rate_idle = 5
@@ -64,15 +63,13 @@ if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
 end
 
 -- python, ruby, perl
-if vim.fn.has('wsl') == 1 then
-    vim.g.python3_host_prog ="python3"
-    vim.cmd 'let g:loaded_perl_provider = 0'
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 or vim.fn.has('wsl') then
+    vim.g.python3_host_prog = 'python3'
+elseif vim.fn.has('linux') then
+    vim.g.python3_host_prog = "/usr/bin/python3.11"
 end
-if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
-    vim.g.python3_host_prog ="python.exe"
-    vim.cmd 'let g:loaded_ruby_provider = 0'
-    vim.cmd 'let g:loaded_perl_provider = 0'
-end
+vim.cmd 'let g:loaded_perl_provider = 0'
+vim.cmd 'let g:loaded_ruby_provider = 0'
 
  
 --
