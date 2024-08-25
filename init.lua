@@ -22,7 +22,7 @@ vim.o.hlsearch = true
 vim.o.incsearch = true
 vim.bo.smartindent = true
 vim.bo.autoindent = true
-vim.bo.expandtab = true
+vim.bo.expandtab = false
 vim.bo.shiftwidth = 4
 vim.bo.softtabstop = 4
 vim.bo.tabstop = 8
@@ -102,7 +102,12 @@ local plugins = {
     	dependencies = { 'nvim-tree/nvim-web-devicons', opt = true }
     },
     { 'akinsho/bufferline.nvim', version = '*', dependencies = 'nvim-tree/nvim-web-devicons' },
-    { 'neoclide/coc.nvim', branch = 'release' },
+    {
+	'neoclide/coc.nvim', branch = 'release',
+	dependencies = {
+	    'pappasam/coc-jedi',
+	}
+    },
     {
         "nvim-neo-tree/neo-tree.nvim",
         branch = "v3.x",
@@ -128,12 +133,11 @@ local plugins = {
     'kevinhwang91/nvim-hlslens',
     -- 'LuaLS/lua-language-server',
     'cdelledonne/vim-cmake',
-    'pappasam/coc-jedi',
+    'github/copilot.vim',
 }
 if (vim.fn.has('wsl') == 1) then
     table.insert(plugins, {
         'lervag/vimtex',
-        'github/copilot.vim',
     })
 end
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
@@ -184,8 +188,9 @@ require('lualine').setup {
 }
 
 -- vim-cmake
-vim.cmd "autocmd FileType c,cpp nnoremap <silent> <F7> :CMakeBuild<CR>"
-vim.cmd "autocmd FileType c,cpp nnoremap <silent> <leader>cq :CMakeClose<CR>"
+vim.api.nvim_command('command! CCMakeGenerate execute "!cmake -DCMAKE_BUILD_TYPE=Debug -B build" | execute "!cp ./build/compile_commands.json ./"')
+vim.api.nvim_command('command! CCMakeBuild execute "!cmake --build build"')
+vim.cmd "autocmd FileType c,cpp nnoremap <silent> <F7> :CCMakeBuild<CR>"
 
 -- nvim-treesitter
 require('nvim-treesitter.configs').setup {
@@ -218,6 +223,21 @@ vim.api.nvim_set_keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]]
 vim.api.nvim_set_keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
 
 -- vim.api.nvim_set_keymap('n', '<Leader>nh', '<Cmd>noh<CR>', kopts)
+
+-- C++
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+    if os.getenv("WSL_DISTRO_NAME") then
+        -- WSL用の設定 (GCCを使用)
+        vim.cmd('set makeprg=gcc')
+    else
+        -- Windows用の設定 (MinGWを使用)
+        vim.cmd('set makeprg=mingw32-make')
+    end
+elseif vim.fn.has('wsl') == 1 then
+    -- WSL用の設定 (GCCを使用)
+    vim.cmd('set makeprg=gcc')
+end
+
 
 --
 -- Coc
