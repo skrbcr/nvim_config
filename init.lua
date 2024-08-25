@@ -188,7 +188,7 @@ require('lualine').setup {
 }
 
 -- vim-cmake
-vim.api.nvim_command('command! CCMakeGenerate execute "!cmake -DCMAKE_BUILD_TYPE=Debug -B build" | execute "!cp ./build/compile_commands.json ./"')
+vim.api.nvim_command('command! CCMakeGenerate execute "!cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja -B build" | execute "!cp ./build/compile_commands.json ./"')
 vim.api.nvim_command('command! CCMakeBuild execute "!cmake --build build"')
 vim.cmd "autocmd FileType c,cpp nnoremap <silent> <F7> :CCMakeBuild<CR>"
 
