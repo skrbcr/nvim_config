@@ -22,14 +22,14 @@ vim.o.hlsearch = true
 vim.o.incsearch = true
 vim.bo.smartindent = true
 vim.bo.autoindent = true
-vim.bo.expandtab = true
-vim.bo.shiftwidth = 4
+vim.bo.tabstop = 8
 vim.bo.softtabstop = 4
-vim.bo.tabstop = 4
+vim.bo.shiftwidth = 4
+vim.bo.expandtab = false
 vim.o.completeopt = 'menuone', 'noinsert'
 
 -- gui
-vim.o.guifont = 'PlemolJP Console NF:h12'
+vim.o.guifont = 'PlemolJP Console NF:h14'
 if vim.g.neovide then
     vim.g.neovide_refresh_rate = 60
     vim.g.neovide_refresh_rate_idle = 5
@@ -72,7 +72,6 @@ if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
     vim.cmd 'let g:loaded_perl_provider = 0'
 end
 
- 
 --
 -- plugins
 --
@@ -116,20 +115,29 @@ local plugins = {
         ft = { "markdown" },
     },
     'lewis6991/gitsigns.nvim',
+	'pappasam/coc-jedi',
+	{
+		'lervag/vimtex',
+		lazy = falde,
+		init = function()
+			-- configurations
+		end
+	},
+    'cdelledonne/vim-cmake',
+    {
+        "nvim-neo-tree/neo-tree.nvim",
+        branch = "v3.x",
+        dependencies = {
+          "nvim-lua/plenary.nvim",
+          "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+          "MunifTanjim/nui.nvim",
+          -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+        },
+    },
 }
-if (vim.fn.has('wsl') == 1) then
-    table.insert(plugins, {
-        'pappasam/coc-jedi',
-        'lervag/vimtex',
-        'cdelledonne/vim-cmake'
-    })
-end
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
 end
 require('lazy').setup(plugins)
-
--- Bufferline
-require('bufferline').setup{}
 
 -- colorscheme
 require('tokyonight').setup({
@@ -143,6 +151,27 @@ require('lualine').setup {
     globalstatus = true,
   }
 }
+
+require("bufferline").setup{
+    options = {
+        separator_style = "slant",
+        hover = {
+            enabled = true,
+            delay = 0,
+            reveal = { 'close' },
+        },
+    },
+}
+
+require("neo-tree").setup({
+    filesystem = {
+	filtered_items = {
+	    hide_dotfiles = false,
+	    hide_gitignored = false,
+	    hide_hidden = false,
+	},
+    },
+})
 
 -- vim-cmake
 vim.cmd "autocmd FileType c,cpp nnoremap <silent> <F7> :CMakeBuild<CR>"
@@ -205,10 +234,19 @@ keyset("n", "<leader>f", "<Plug>(coc-format-selected)", {silent = true})
 vim.cmd("command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument")
 
 -- VimTeX
-if vim.fn.has('wsl') == 1 then
-    vim.g.vimtex_view_general_viewer = 'SumatraPDF.exe'
-    vim.g.vimtex_compiler_latexmk_engines = { _ = '-lualatex' }
-end
+vim.g.vimtex_compiler_progname = 'nvr'
+vim.g.vimtex_view_general_viewer = 'SumatraPDF.exe'
+vim.g.vimtex_view_general_options = '-reuse-instance -forward-search @tex @line @pdf'
+vim.g.vimtex_compiler_latexmk_engines = { _ = '-lualatex' }
+vim.g.vimtex_compiler_latexmk = {
+    options = {
+        '-shell-escape',
+        '-synctex=1',
+        '-interaction=nonstopmode',
+    }
+}
+-- vim.g.vimtex_view_general_options = '-reuse-instance -forward-search @tex @line @pdf'
+-- vim.g.vimtex_view_general_options_latexmk = '-reuse-instance'
 
 
 --
@@ -227,5 +265,5 @@ vim.api.nvim_set_keymap('n', '<C-p>', ':MarkdownPreviewToggle<CR>', { silent = t
 vim.api.nvim_set_keymap('v', '<leader>c', '"+y', { silent=true, noremap=true }) 
 vim.api.nvim_set_keymap('n', '<leader>v', '"+p', { silent=true, noremap=true }) 
 vim.api.nvim_set_keymap('v', '<leader>v', '"+p', { silent=true, noremap=true }) 
-vim.api.nvim_set_keymap('n', '<space>e', '<Cmd>CocCommand explorer<CR>', { silent=true, noremap=true })
+vim.api.nvim_set_keymap('n', '<space>e', '<Cmd>Neotree<CR>', { silent=true, noremap=true })
 
