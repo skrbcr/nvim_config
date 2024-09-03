@@ -27,9 +27,10 @@ vim.bo.softtabstop = 4
 vim.bo.shiftwidth = 4
 vim.bo.expandtab = false
 vim.o.completeopt = 'menuone', 'noinsert'
+vim.o.mousemoveevent = true
 
 -- gui
-vim.o.guifont = 'PlemolJP Console NF:h14'
+vim.o.guifont = 'PlemolJP Console NF:h13'
 if vim.g.neovide then
     vim.g.neovide_refresh_rate = 60
     vim.g.neovide_refresh_rate_idle = 5
@@ -62,15 +63,13 @@ if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
 end
 
 -- python, ruby, perl
-if vim.fn.has('wsl') == 1 then
-    vim.g.python3_host_prog ="python3"
-    vim.cmd 'let g:loaded_perl_provider = 0'
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 or vim.fn.has('wsl') then
+    vim.g.python3_host_prog = 'python3'
+elseif vim.fn.has('linux') then
+    vim.g.python3_host_prog = "/usr/bin/python3.11"
 end
-if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
-    vim.g.python3_host_prog ="python.exe"
-    vim.cmd 'let g:loaded_ruby_provider = 0'
-    vim.cmd 'let g:loaded_perl_provider = 0'
-end
+vim.cmd 'let g:loaded_perl_provider = 0'
+vim.cmd 'let g:loaded_ruby_provider = 0'
 
 --
 -- plugins
@@ -92,17 +91,32 @@ vim.opt.rtp:prepend(lazypath)
 local plugins = {
     { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
     {
-        'folke/tokyonight.nvim',
-        lazy = false,
-        priority = 1000,
-        opts = {}
+      "folke/tokyonight.nvim",
+      lazy = false,
+      priority = 1000,
+      opts = {},
     },
     {
     	'nvim-lualine/lualine.nvim',
     	dependencies = { 'nvim-tree/nvim-web-devicons', opt = true }
     },
     { 'akinsho/bufferline.nvim', version = '*', dependencies = 'nvim-tree/nvim-web-devicons' },
-    { 'neoclide/coc.nvim', branch = 'release' },
+    {
+	'neoclide/coc.nvim', branch = 'release',
+	dependencies = {
+	    'pappasam/coc-jedi',
+	}
+    },
+    {
+        "nvim-neo-tree/neo-tree.nvim",
+        branch = "v3.x",
+        dependencies = {
+          "nvim-lua/plenary.nvim",
+          "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+          "MunifTanjim/nui.nvim",
+          -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+        }
+    },
     'tpope/vim-commentary',
     'ryanoasis/vim-devicons',
     {
@@ -115,35 +129,55 @@ local plugins = {
         ft = { "markdown" },
     },
     'lewis6991/gitsigns.nvim',
-	'pappasam/coc-jedi',
-	{
-		'lervag/vimtex',
-		lazy = falde,
-		init = function()
-			-- configurations
-		end
-	},
+    'kevinhwang91/nvim-hlslens',
+    -- 'LuaLS/lua-language-server',
     'cdelledonne/vim-cmake',
-    {
-        "nvim-neo-tree/neo-tree.nvim",
-        branch = "v3.x",
-        dependencies = {
-          "nvim-lua/plenary.nvim",
-          "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
-          "MunifTanjim/nui.nvim",
-          -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
-        },
-    },
+    'github/copilot.vim',
 }
-if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+if (vim.fn.has('wsl') == 1) then
+    table.insert(plugins, {
+        'lervag/vimtex',
+    })
 end
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+    table.insert(plugins, {
+    })
+end
+
 require('lazy').setup(plugins)
 
 -- colorscheme
-require('tokyonight').setup({
-    style = 'night',
-})
-vim.cmd 'colorscheme tokyonight'
+require('tokyonight').setup {}
+vim.cmd[[colorscheme tokyonight-night]]
+require('neo-tree').setup {
+    filesystem = {
+        filtered_items = {
+            hide_dotfiles = false,
+            hide_gitignored = false,
+            hide_hidden = false,
+        }
+    },
+}
+
+require('bufferline').setup{
+    options = {
+        separator_style = "slant",
+        hover = {
+            enabled = true,
+            delay = 0,
+            reveal = { 'close' },
+        },
+        offsets = {
+            {
+                filetype = "NvimTree",
+                text = "File Explorer",
+                highlight = "Directory",
+                text_align = "left",
+                separator = true,
+            }
+        },
+    },
+}
 require('lualine').setup {
   options = {
     icons_enabled = true,
@@ -174,8 +208,9 @@ require("neo-tree").setup({
 })
 
 -- vim-cmake
-vim.cmd "autocmd FileType c,cpp nnoremap <silent> <F7> :CMakeBuild<CR>"
-vim.cmd "autocmd FileType c,cpp nnoremap <silent> <leader>cq :CMakeClose<CR>"
+vim.api.nvim_command('command! CCMakeGenerate execute "!cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja -B build" | execute "!cp ./build/compile_commands.json ./"')
+vim.api.nvim_command('command! CCMakeBuild execute "!cmake --build build"')
+vim.cmd "autocmd FileType c,cpp nnoremap <silent> <F7> :CCMakeBuild<CR>"
 
 -- nvim-treesitter
 require('nvim-treesitter.configs').setup {
@@ -189,8 +224,39 @@ require('nvim-treesitter.configs').setup {
     },
 }
 
--- gitsigns.nvim
 require('gitsigns').setup()
+
+-- hlsearch
+require('hlslens').setup()
+
+local kopts = {noremap = true, silent = true}
+
+vim.api.nvim_set_keymap('n', 'n',
+    [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]],
+    kopts)
+vim.api.nvim_set_keymap('n', 'N',
+    [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]],
+    kopts)
+vim.api.nvim_set_keymap('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], kopts)
+vim.api.nvim_set_keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
+
+-- vim.api.nvim_set_keymap('n', '<Leader>nh', '<Cmd>noh<CR>', kopts)
+
+-- C++
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+    if os.getenv("WSL_DISTRO_NAME") then
+        -- WSL用の設定 (GCCを使用)
+        vim.cmd('set makeprg=gcc')
+    else
+        -- Windows用の設定 (MinGWを使用)
+        vim.cmd('set makeprg=mingw32-make')
+    end
+elseif vim.fn.has('wsl') == 1 then
+    -- WSL用の設定 (GCCを使用)
+    vim.cmd('set makeprg=gcc')
+end
 
 
 --
@@ -234,19 +300,16 @@ keyset("n", "<leader>f", "<Plug>(coc-format-selected)", {silent = true})
 vim.cmd("command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument")
 
 -- VimTeX
-vim.g.vimtex_compiler_progname = 'nvr'
-vim.g.vimtex_view_general_viewer = 'SumatraPDF.exe'
-vim.g.vimtex_view_general_options = '-reuse-instance -forward-search @tex @line @pdf'
-vim.g.vimtex_compiler_latexmk_engines = { _ = '-lualatex' }
-vim.g.vimtex_compiler_latexmk = {
-    options = {
-        '-shell-escape',
-        '-synctex=1',
-        '-interaction=nonstopmode',
+if vim.fn.has('wsl') == 1 then
+    vim.g.vimtex_view_general_viewer = 'SumatraPDF.exe'
+    vim.g.vimtex_compiler_latexmk_engines = { _ = '-lualatex' }
+    -- Cited from https://qiita.com/sff1019/items/cb8cae96a1f7026656fc
+    vim.g.vimtex_compiler_latexmk = {
+        options = {
+            '-shell-escape'
+        }
     }
-}
--- vim.g.vimtex_view_general_options = '-reuse-instance -forward-search @tex @line @pdf'
--- vim.g.vimtex_view_general_options_latexmk = '-reuse-instance'
+end
 
 
 --
@@ -265,5 +328,5 @@ vim.api.nvim_set_keymap('n', '<C-p>', ':MarkdownPreviewToggle<CR>', { silent = t
 vim.api.nvim_set_keymap('v', '<leader>c', '"+y', { silent=true, noremap=true }) 
 vim.api.nvim_set_keymap('n', '<leader>v', '"+p', { silent=true, noremap=true }) 
 vim.api.nvim_set_keymap('v', '<leader>v', '"+p', { silent=true, noremap=true }) 
-vim.api.nvim_set_keymap('n', '<space>e', '<Cmd>Neotree<CR>', { silent=true, noremap=true })
+vim.api.nvim_set_keymap('n', '<space>e', ':Neotree<CR>', { silent=true, noremap=true })
 
