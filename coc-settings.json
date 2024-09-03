@@ -9,11 +9,4 @@
   },
   "snippets.ultisnips.pythonPrompt": false,
   "preferences.formatOnType": true,
-<<<<<<< HEAD
-  "coc.source.vimtex.filetypes": [
-    "tex",
-    "latex"
-  ]
-=======
->>>>>>> 78ed9b4f580dd8a97838a7df081d02889b7def22
 }

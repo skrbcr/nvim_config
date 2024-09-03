@@ -133,10 +133,13 @@ local plugins = {
     -- 'LuaLS/lua-language-server',
     'cdelledonne/vim-cmake',
     'github/copilot.vim',
+	{
+	    'lervag/vimtex',
+	    lazy = false,
+	},
 }
 if (vim.fn.has('wsl') == 1) then
     table.insert(plugins, {
-        'lervag/vimtex',
     })
 end
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
@@ -229,6 +232,18 @@ require('gitsigns').setup()
 -- hlsearch
 require('hlslens').setup()
 
+-- vimtex
+vim.g.vimtex_view_general_viewer = 'SumatraPDF.exe'
+vim.g.vimtex_compiler_latexmk_engines = { _ = '-lualatex' }
+-- Cited from https://qiita.com/sff1019/items/cb8cae96a1f7026656fc
+vim.g.vimtex_compiler_latexmk = {
+    options = {
+        '-shell-escape',
+        '-synctex=1',
+        '-interaction=nonstopmode',
+    }
+}
+
 local kopts = {noremap = true, silent = true}
 
 vim.api.nvim_set_keymap('n', 'n',
@@ -298,18 +313,6 @@ keyset("n", "<leader>f", "<Plug>(coc-format-selected)", {silent = true})
 
 -- coc-prettier
 vim.cmd("command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument")
-
--- VimTeX
-if vim.fn.has('wsl') == 1 then
-    vim.g.vimtex_view_general_viewer = 'SumatraPDF.exe'
-    vim.g.vimtex_compiler_latexmk_engines = { _ = '-lualatex' }
-    -- Cited from https://qiita.com/sff1019/items/cb8cae96a1f7026656fc
-    vim.g.vimtex_compiler_latexmk = {
-        options = {
-            '-shell-escape'
-        }
-    }
-end
 
 
 --
