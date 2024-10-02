@@ -6,20 +6,7 @@
     }
   },
   "languageserver": {
-    "ccls": {
-      "command": "ccls",
-      "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
-      "rootPatterns": [".ccls-root", "compile_commands.json"],
-      "initializationOptions": {
-        "cache": {
-          "directory": ".ccls-cache"
-        },
-        "client": {
-          "snippetSupport": true
-        }
-      }
-    }
   },
   "snippets.ultisnips.pythonPrompt": false,
-  "preferences.formatOnType": true
+  "preferences.formatOnType": true,
 }

@@ -22,10 +22,10 @@ vim.o.hlsearch = true
 vim.o.incsearch = true
 vim.bo.smartindent = true
 vim.bo.autoindent = true
-vim.bo.expandtab = true
-vim.bo.shiftwidth = 4
-vim.bo.softtabstop = 4
 vim.bo.tabstop = 8
+vim.bo.softtabstop = 4
+vim.bo.shiftwidth = 4
+vim.bo.expandtab = false
 vim.o.completeopt = 'menuone', 'noinsert'
 vim.o.mousemoveevent = true
 
@@ -73,7 +73,6 @@ end
 vim.cmd 'let g:loaded_perl_provider = 0'
 vim.cmd 'let g:loaded_ruby_provider = 0'
 
- 
 --
 -- plugins
 --
@@ -104,7 +103,12 @@ local plugins = {
     	dependencies = { 'nvim-tree/nvim-web-devicons', opt = true }
     },
     { 'akinsho/bufferline.nvim', version = '*', dependencies = 'nvim-tree/nvim-web-devicons' },
-    { 'neoclide/coc.nvim', branch = 'release' },
+    {
+	'neoclide/coc.nvim', branch = 'release',
+	dependencies = {
+	    'pappasam/coc-jedi',
+	}
+    },
     {
         "nvim-neo-tree/neo-tree.nvim",
         branch = "v3.x",
@@ -130,11 +134,14 @@ local plugins = {
     'kevinhwang91/nvim-hlslens',
     -- 'LuaLS/lua-language-server',
     'cdelledonne/vim-cmake',
-    'pappasam/coc-jedi',
+    'github/copilot.vim',
+	{
+	    'lervag/vimtex',
+	    lazy = false,
+	},
 }
 if (vim.fn.has('wsl') == 1) then
     table.insert(plugins, {
-        'lervag/vimtex',
     })
 end
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
@@ -184,9 +191,31 @@ require('lualine').setup {
   }
 }
 
+require("bufferline").setup{
+    options = {
+        separator_style = "slant",
+        hover = {
+            enabled = true,
+            delay = 0,
+            reveal = { 'close' },
+        },
+    },
+}
+
+require("neo-tree").setup({
+    filesystem = {
+	filtered_items = {
+	    hide_dotfiles = false,
+	    hide_gitignored = false,
+	    hide_hidden = false,
+	},
+    },
+})
+
 -- vim-cmake
-vim.cmd "autocmd FileType c,cpp nnoremap <silent> <F7> :CMakeBuild<CR>"
-vim.cmd "autocmd FileType c,cpp nnoremap <silent> <leader>cq :CMakeClose<CR>"
+vim.api.nvim_command('command! CCMakeGenerate execute "!cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja -B build" | execute "!cp ./build/compile_commands.json ./"')
+vim.api.nvim_command('command! CCMakeBuild execute "!cmake --build build"')
+vim.cmd "autocmd FileType c,cpp nnoremap <silent> <F7> :CCMakeBuild<CR>"
 
 -- nvim-treesitter
 require('nvim-treesitter.configs').setup {
@@ -205,6 +234,18 @@ require('gitsigns').setup()
 -- hlsearch
 require('hlslens').setup()
 
+-- vimtex
+vim.g.vimtex_view_general_viewer = 'SumatraPDF.exe'
+vim.g.vimtex_compiler_latexmk_engines = { _ = '-lualatex' }
+-- Cited from https://qiita.com/sff1019/items/cb8cae96a1f7026656fc
+vim.g.vimtex_compiler_latexmk = {
+    options = {
+        '-shell-escape',
+        '-synctex=1',
+        '-interaction=nonstopmode',
+    }
+}
+
 local kopts = {noremap = true, silent = true}
 
 vim.api.nvim_set_keymap('n', 'n',
@@ -219,6 +260,21 @@ vim.api.nvim_set_keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]]
 vim.api.nvim_set_keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
 
 -- vim.api.nvim_set_keymap('n', '<Leader>nh', '<Cmd>noh<CR>', kopts)
+
+-- C++
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+    if os.getenv("WSL_DISTRO_NAME") then
+        -- WSL用の設定 (GCCを使用)
+        vim.cmd('set makeprg=gcc')
+    else
+        -- Windows用の設定 (MinGWを使用)
+        vim.cmd('set makeprg=mingw32-make')
+    end
+elseif vim.fn.has('wsl') == 1 then
+    -- WSL用の設定 (GCCを使用)
+    vim.cmd('set makeprg=gcc')
+end
+
 
 --
 -- Coc
@@ -259,18 +315,6 @@ keyset("n", "<leader>f", "<Plug>(coc-format-selected)", {silent = true})
 
 -- coc-prettier
 vim.cmd("command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument")
-
--- VimTeX
-if vim.fn.has('wsl') == 1 then
-    vim.g.vimtex_view_general_viewer = 'SumatraPDF.exe'
-    vim.g.vimtex_compiler_latexmk_engines = { _ = '-lualatex' }
-    -- Cited from https://qiita.com/sff1019/items/cb8cae96a1f7026656fc
-    vim.g.vimtex_compiler_latexmk = {
-        options = {
-            '-shell-escape'
-        }
-    }
-end
 
 
 --
