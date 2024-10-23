@@ -335,3 +335,15 @@ vim.api.nvim_set_keymap('n', '<leader>v', '"+p', { silent=true, noremap=true })
 vim.api.nvim_set_keymap('v', '<leader>v', '"+p', { silent=true, noremap=true }) 
 vim.api.nvim_set_keymap('n', '<space>e', ':Neotree<CR>', { silent=true, noremap=true })
 
+---
+--- Modify tab settings for LaTeX
+---
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "tex",
+    callback = function()
+        vim.opt.tabstop = 4
+	vim.opt.softtabstop = 4
+        vim.opt.shiftwidth = 4
+        vim.opt.expandtab = true
+    end
+})
