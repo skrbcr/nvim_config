@@ -183,6 +183,7 @@ require('bufferline').setup{
         },
     },
 }
+
 require('lualine').setup {
   options = {
     icons_enabled = true,
@@ -190,27 +191,6 @@ require('lualine').setup {
     globalstatus = true,
   }
 }
-
-require("bufferline").setup{
-    options = {
-        separator_style = "slant",
-        hover = {
-            enabled = true,
-            delay = 0,
-            reveal = { 'close' },
-        },
-    },
-}
-
-require("neo-tree").setup({
-    filesystem = {
-	filtered_items = {
-	    hide_dotfiles = false,
-	    hide_gitignored = false,
-	    hide_hidden = false,
-	},
-    },
-})
 
 -- vim-cmake
 vim.api.nvim_command('command! CCMakeGenerate execute "!cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja -B build" | execute "!cp ./build/compile_commands.json ./"')
@@ -288,7 +268,6 @@ end
 
 -- Use Tab for trigger completion with characters ahead and navigate
 local opts = {silent = true, noremap = true, expr = true, replace_keycodes = false}
--- keyset("i", "<TAB>", 'coc#pum#visible() ? coc#pum#next(1) : v:lua.check_back_space() ? "<TAB>" : coc#refresh()', opts)
 keyset("i", "<TAB>", 'coc#pum#visible() ? coc#pum#next(1) : "<Tab>"', opts)
 keyset("i", "<S-TAB>", [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], opts)
 -- Make <CR> to accept selected completion item or notify coc.nvim to format
