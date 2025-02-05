@@ -397,9 +397,7 @@ vim.api.nvim_set_keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]]
 --
 -- Key Maps
 --
-vim.api.nvim_set_keymap('i', '<CR>', '<C-y>', { noremap = true })
-vim.cmd 'inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\\<CR>"'
-vim.cmd [[inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<C-r>=coc#on_enter()\<CR>" ]]
+-- vim.api.nvim_set_keymap('i', '<CR>', '<C-y>', { noremap = true })
 vim.api.nvim_set_keymap('n', ']b', ':bnext<CR>', { silent = true, noremap = true })
 vim.api.nvim_set_keymap('n', '[b', ':bprev<CR>', { silent = true, noremap = true })
 vim.api.nvim_set_keymap('n', 'M-v', '<C-v>', { noremap = true })
