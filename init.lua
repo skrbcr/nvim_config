@@ -140,8 +140,6 @@ local plugins = {
     },
     'lewis6991/gitsigns.nvim',
     'kevinhwang91/nvim-hlslens',
-    -- 'LuaLS/lua-language-server',
-    -- 'cdelledonne/vim-cmake',
     'github/copilot.vim',
 	{
 		'lervag/vimtex',
@@ -399,20 +397,6 @@ vim.api.nvim_set_keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]]
 vim.api.nvim_set_keymap('n', 'g#', [[g#<Cmd>lua require('hlslens').start()<CR>]], kopts)
 
 -- vim.api.nvim_set_keymap('n', '<Leader>nh', '<Cmd>noh<CR>', kopts)
-
--- C++
-if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
-    if os.getenv("WSL_DISTRO_NAME") then
-        -- WSL用の設定 (GCCを使用)
-        vim.cmd('set makeprg=gcc')
-    else
-        -- Windows用の設定 (MinGWを使用)
-        vim.cmd('set makeprg=mingw32-make')
-    end
-elseif vim.fn.has('wsl') == 1 then
-    -- WSL用の設定 (GCCを使用)
-    vim.cmd('set makeprg=gcc')
-end
 
 
 --
