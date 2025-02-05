@@ -2,7 +2,6 @@
 -- General
 --
 vim.bo.fileencoding = 'utf-8'
--- vim.o.fileencodings = 'sjis', 'utf-8'
 vim.o.backup = false
 vim.bo.swapfile = false
 vim.o.autoread = true
