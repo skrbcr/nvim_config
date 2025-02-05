@@ -9,4 +9,10 @@
   },
   "snippets.ultisnips.pythonPrompt": false,
   "preferences.formatOnType": true,
+  "python": {
+    "pythonPath": ".venv/bin/python",
+    "venvPath": ".venv",
+    "fomatting.provider": "ruff",
+    "linting.ruffEnabled": true,
+  }
 }

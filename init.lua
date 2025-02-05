@@ -52,7 +52,7 @@ if vim.fn.has('wsl') == 1 then
     }
 end
 
--- terminal on Windows
+-- terminal
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
     vim.o.shell = "pwsh.exe"
     vim.o.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
@@ -76,6 +76,14 @@ vim.cmd 'let g:loaded_ruby_provider = 0'
 --
 -- plugins
 --
+local lsp_servers = {
+	'pyright',
+	'ruff',
+}
+local formatters = {
+}
+local diagnostics = {
+}
 
 -- Lazy
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
@@ -103,12 +111,12 @@ local plugins = {
     	dependencies = { 'nvim-tree/nvim-web-devicons', opt = true }
     },
     { 'akinsho/bufferline.nvim', version = '*', dependencies = 'nvim-tree/nvim-web-devicons' },
-    {
-	'neoclide/coc.nvim', branch = 'release',
-	dependencies = {
-	    'pappasam/coc-jedi',
-	}
-    },
+    -- {
+	-- 'neoclide/coc.nvim', branch = 'release',
+	-- -- dependencies = {
+	-- --     'pappasam/coc-jedi',
+	-- -- }
+    -- },
     {
         "nvim-neo-tree/neo-tree.nvim",
         branch = "v3.x",
@@ -133,13 +141,159 @@ local plugins = {
     'lewis6991/gitsigns.nvim',
     'kevinhwang91/nvim-hlslens',
     -- 'LuaLS/lua-language-server',
-    'cdelledonne/vim-cmake',
+    -- 'cdelledonne/vim-cmake',
     'github/copilot.vim',
 	{
-	    'lervag/vimtex',
-	    lazy = false,
+		'lervag/vimtex',
+		lazy = false,
+	},
+	-- lsp icons like vscode
+	{
+	    "onsails/lspkind.nvim",
+	    event = "InsertEnter",
+	},
+	-- LSP
+	{
+	    "williamboman/mason.nvim",
+	    dependencies = {
+	        "williamboman/mason-lspconfig.nvim",
+	        "neovim/nvim-lspconfig",
+	        "jay-babu/mason-null-ls.nvim",
+	        -- "jose-elias-alvarez/null-ls.nvim",
+	        "nvimtools/none-ls.nvim",
+	    },
+	    config = function()
+	        require("mason").setup()
+	        require("mason-lspconfig").setup({
+	            -- lsp_servers table Install
+	            ensure_installed = lsp_servers,
+	        })
+
+	        local lsp_config = require("lspconfig")
+	        -- lsp_servers table setup
+	        for _, lsp_server in ipairs(lsp_servers) do
+	            lsp_config[lsp_server].setup({
+	                root_dir = function(fname)
+	                    return lsp_config.util.find_git_ancestor(fname) or vim.fn.getcwd()
+	                end,
+	            })
+	        end
+	    end,
+	    cmd = "Mason",
+	},
+	-- mason-null-ls
+	{
+	    "jay-babu/mason-null-ls.nvim",
+	    dependencies = {
+	        "williamboman/mason.nvim",
+	        -- "jose-elias-alvarez/null-ls.nvim",
+	        "nvimtools/none-ls.nvim",
+	    },
+	    config = function()
+	        require("mason-null-ls").setup({
+	            automatic_setup = true,
+	            -- formatters table and diagnostics table Install
+	            ensure_installed = vim.tbl_flatten({ formatters, diagnostics }),
+	            handlers = {},
+	        })
+	    end,
+	    cmd = "Mason",
+	},
+	-- none-ls
+	{
+	    -- "jose-elias-alvarez/null-ls.nvim",
+	    "nvimtools/none-ls.nvim",
+	    requires = "nvim-lua/plenary.nvim",
+	    config = function()
+	        local null_ls = require("null-ls")
+
+	        -- formatters table
+	        local formatting_sources = {}
+	        for _, tool in ipairs(formatters) do
+	            table.insert(formatting_sources, null_ls.builtins.formatting[tool])
+	        end
+
+	        -- diagnostics table
+	        local diagnostics_sources = {}
+	        for _, tool in ipairs(diagnostics) do
+	            table.insert(diagnostics_sources, null_ls.builtins.diagnostics[tool])
+	        end
+
+	        -- none-ls setup
+	        null_ls.setup({
+	            diagnostics_format = "[#{m}] #{s} (#{c})",
+	            sources = vim.tbl_flatten({ formatting_sources, diagnostics_sources }),
+	        })
+	    end,
+	    event = { "BufReadPre", "BufNewFile" },
+	},
+	-- Completion
+	{
+		'hrsh7th/nvim-cmp',
+		dependencies = {
+        	"hrsh7th/cmp-nvim-lsp",
+        	"hrsh7th/cmp-nvim-lua",
+        	"hrsh7th/cmp-buffer",
+        	"hrsh7th/cmp-path",
+        	"hrsh7th/cmp-cmdline",
+        	"saadparwaiz1/cmp_luasnip",
+        	"L3MON4D3/LuaSnip",
+		},
+		event = { "InsertEnter", "CmdlineEnter" },
+		config = function()
+    		local cmp = require("cmp")
+    		local lspkind = require("lspkind")
+    		vim.opt.completeopt = { "menu", "menuone", "noselect" }
+
+    		cmp.setup({
+    		    formatting = {
+    		        format = lspkind.cmp_format({
+    		            mode = "symbol",
+    		            maxwidth = 50,
+    		            ellipsis_char = "...",
+    		            before = function(entry, vim_item)
+    		                return vim_item
+    		            end,
+    		        }),
+    		    },
+    		    snippet = {
+    		        expand = function(args)
+    		            require("luasnip").lsp_expand(args.body)
+    		        end,
+    		    },
+    		    window = {
+    		        completion = cmp.config.window.bordered(),
+    		        documentation = cmp.config.window.bordered(),
+    		    },
+    		    mapping = cmp.mapping.preset.insert({
+					["<C-j>"] = cmp.mapping.select_next_item(),
+					["<C-k>"] = cmp.mapping.select_prev_item(),
+    		        ["<C-e>"] = cmp.mapping.abort(),
+    		        ["<CR>"] = cmp.mapping.confirm({ select = true }),
+    		    }),
+    		    sources = cmp.config.sources({
+    		        { name = "nvim_lsp" },
+    		        { name = "nvim_lua" },
+    		        { name = "luasnip" }, -- For luasnip users.
+    		        -- { name = "orgmode" },
+    		    }, {
+    		        { name = "buffer" },
+    		        { name = "path" },
+    		    }),
+    		})
+
+    		cmp.setup.cmdline(":", {
+    		    mapping = cmp.mapping.preset.cmdline(),
+    		    sources = cmp.config.sources({
+    		        { name = "path" },
+    		    }, {
+    		        { name = "cmdline" },
+    		    }),
+    		})
+		end
 	},
 }
+
 if (vim.fn.has('wsl') == 1) then
     table.insert(plugins, {
     })
@@ -192,10 +346,15 @@ require('lualine').setup {
   }
 }
 
--- vim-cmake
-vim.api.nvim_command('command! CCMakeGenerate execute "!cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja -B build" | execute "!cp ./build/compile_commands.json ./"')
-vim.api.nvim_command('command! CCMakeBuild execute "!cmake --build build"')
-vim.cmd "autocmd FileType c,cpp nnoremap <silent> <F7> :CCMakeBuild<CR>"
+require("lspconfig").pyright.setup({
+    settings = {
+        python = {
+            pythonPath = vim.fn.getcwd() .. "/.venv/bin/python",
+            venvPath = vim.fn.getcwd(),
+            venv = ".venv",
+        },
+    },
+})
 
 -- nvim-treesitter
 require('nvim-treesitter.configs').setup {
