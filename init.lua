@@ -25,7 +25,6 @@ vim.bo.tabstop = 8
 vim.bo.softtabstop = 4
 vim.bo.shiftwidth = 4
 vim.bo.expandtab = false
-vim.o.completeopt = 'menuone', 'noinsert'
 vim.o.mousemoveevent = true
 
 -- gui
@@ -80,10 +79,14 @@ vim.cmd 'let g:loaded_ruby_provider = 0'
 local lsp_servers = {
 	'pyright',
 	'ruff',
+	'texlab',
 }
 local formatters = {
 	'black',
 	'isort',
+	-- 'vale',
+	-- 'latexindent',
+	-- 'bibtex-tidy',
 }
 local diagnostics = {
 }
@@ -224,6 +227,12 @@ local plugins = {
 	},
 	-- Completion
 	{
+        "L3MON4D3/LuaSnip",
+		config = function()
+			require("luasnip.loaders.from_snipmate").load()
+		end,
+	},
+	{
 		'hrsh7th/nvim-cmp',
 		dependencies = {
         	"hrsh7th/cmp-nvim-lsp",
@@ -232,12 +241,12 @@ local plugins = {
         	"hrsh7th/cmp-path",
         	"hrsh7th/cmp-cmdline",
         	"saadparwaiz1/cmp_luasnip",
-        	"L3MON4D3/LuaSnip",
 		},
 		event = { "InsertEnter", "CmdlineEnter" },
 		config = function()
     		local cmp = require("cmp")
     		local lspkind = require("lspkind")
+			local luasnip = require("luasnip")
     		vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
     		cmp.setup({
@@ -261,10 +270,68 @@ local plugins = {
     		        documentation = cmp.config.window.bordered(),
     		    },
     		    mapping = cmp.mapping.preset.insert({
-					["<C-j>"] = cmp.mapping.select_next_item(),
-					["<C-k>"] = cmp.mapping.select_prev_item(),
-    		        ["<C-e>"] = cmp.mapping.abort(),
-    		        ["<CR>"] = cmp.mapping.confirm({ select = true }),
+					["<C-j>"] = cmp.mapping(function(fallback)
+						if cmp.visible() then
+							cmp.select_next_item()
+						else
+							fallback()
+						end
+					end, { "i", "s" }),
+					["<C-k>"] = cmp.mapping(function(fallback)
+						if cmp.visible() then
+							cmp.select_prev_item()
+						else
+							fallback()
+						end
+					end, { "i", "s" }),
+					["<C-S-j>"] = cmp.mapping(function(fallback)
+						if luasnip.jumpable(1) then
+							luasnip.jump(1)
+						else
+							fallback()
+						end
+					end, { "i", "s" }),
+					["<C-S-k>"] = cmp.mapping(function(fallback)
+						if luasnip.jumpable(-1) then
+							luasnip.jump(-1)
+						else
+							fallback()
+						end
+					end, { "i", "s" }),
+					-- ["<TAB>"] = cmp.mapping(function(fallback)
+					-- 	if cmp.visible() then
+					-- 		cmp.select_next_item()
+					-- 	elseif luasnip.expand_or_jumpable(1) then
+					-- 		luasnip.jump(1)
+					-- 	else
+					-- 		fallback()
+					-- 	end
+					-- end, { "i", "s" }),
+					-- ["<S-TAB>"] = cmp.mapping(function(fallback)
+					-- 	if cmp.visible() then
+					-- 		cmp.select_prev_item()
+					-- 	elseif luasnip.expand_or_jumpable(-1) then
+					-- 		luasnip.jump(-1)
+					-- 	else
+					-- 		fallback()
+					-- 	end
+					-- end, { "i", "s" }),
+    		        ["<C-e>"] = cmp.mapping(function(fallback)
+						if cmp.visible() then
+							cmp.abort()
+						end
+					end),
+    		        ["<CR>"] = cmp.mapping(function(fallback)
+						if cmp.visible() then
+							if luasnip.expandable() then
+								luasnip.expand()
+							else
+								cmp.confirm({ select = true })
+							end
+						else
+							fallback()
+						end
+					end),
     		    }),
     		    sources = cmp.config.sources({
     		        { name = "nvim_lsp" },
@@ -362,6 +429,8 @@ require('nvim-treesitter.configs').setup {
         additional_vim_regex_highlighting = false,
     },
 }
+
+require('lspconfig').texlab.setup{}
 
 require('gitsigns').setup()
 
