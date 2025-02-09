@@ -84,6 +84,7 @@ local lsp_servers = {
 local formatters = {
 	'black',
 	'isort',
+	'prettier',
 	-- 'vale',
 	-- 'latexindent',
 	-- 'bibtex-tidy',
