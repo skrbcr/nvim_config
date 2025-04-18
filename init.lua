@@ -21,10 +21,20 @@ vim.o.hlsearch = true
 vim.o.incsearch = true
 vim.bo.smartindent = true
 vim.bo.autoindent = true
+-- if filetype is tsx, tsxreact, js, jsreact, then use 2 spaces
 vim.bo.tabstop = 8
 vim.bo.softtabstop = 4
 vim.bo.shiftwidth = 4
 vim.bo.expandtab = false
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+  callback = function()
+    vim.bo.tabstop     = 2      -- <Tab> の見かけ幅
+    vim.bo.shiftwidth  = 2      -- >> や auto‑indent の幅
+    vim.bo.softtabstop = 2      -- <BS> 時の減る幅
+    vim.bo.expandtab   = true   -- 実際のファイルにも半角 2 個のスペース
+  end,
+})
 vim.o.mousemoveevent = true
 
 -- gui
@@ -80,6 +90,7 @@ local lsp_servers = {
 	'pyright',
 	'ruff',
 	'texlab',
+	'ts_ls',
 }
 local formatters = {
 	'black',
@@ -417,6 +428,11 @@ require("lspconfig").pyright.setup({
             venv = ".venv",
         },
     },
+})
+
+require("lspconfig").ts_ls.setup({
+	filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+	init_options = { hostInfo = "neovim" },
 })
 
 -- nvim-treesitter
